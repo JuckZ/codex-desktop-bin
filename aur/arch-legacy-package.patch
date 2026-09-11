@@ -142,10 +142,10 @@ index ec90862..611a82e 100755
      cp -aT "$APP_DIR" "$app_root"
      mkdir -p "$app_root/.codex-linux"
 diff --git a/updater/src/app.rs b/updater/src/app.rs
-index 323b69d..4ac9579 100644
+index 0f51e07..86f53c7 100644
 --- a/updater/src/app.rs
 +++ b/updater/src/app.rs
-@@ -28,7 +28,7 @@ pub async fn run(cli: Cli) -> Result<()> {
+@@ -30,7 +30,7 @@ pub async fn run(cli: Cli) -> Result<()> {
  
      match cli.command {
          Commands::Daemon => daemon(&config, &mut state, &paths).await,
@@ -153,8 +153,8 @@ index 323b69d..4ac9579 100644
 +        Commands::CheckNow => check(&config, &mut state, &paths, true).await,
          Commands::Status { json } => status(&state, json),
          Commands::Diagnose { json } => diagnose(&config, &state, &paths, json),
-         Commands::InstallReady => install_ready(&config, &mut state, &paths, true).await,
-@@ -56,7 +56,7 @@ fn run_privileged_command(command: &Commands) -> Option<Result<()>> {
+         Commands::InstallReady => run_install_ready(&config, &mut state, &paths).await,
+@@ -58,7 +58,7 @@ fn run_privileged_command(command: &Commands) -> Option<Result<()>> {
  
  async fn daemon(config: &RuntimeConfig, state: &mut PersistedState, paths: &RuntimePaths) -> Result<()> {
      time::sleep(config.initial_check_delay_duration()).await;
@@ -163,12 +163,16 @@ index 323b69d..4ac9579 100644
          error!(?error, "initial update check failed");
      }
      let mut checks = time::interval(config.check_interval_duration());
-@@ -67,3 +67,3 @@ async fn daemon(config: &RuntimeConfig, state: &mut PersistedState, paths: &Runt
+@@ -75,7 +75,7 @@ async fn daemon(config: &RuntimeConfig, state: &mut PersistedState, paths: &Runt
+         }
+ 
          tokio::select! {
 -            _ = checks.tick() => if let Err(error) = check(config, state, paths).await { error!(?error, "periodic update check failed"); },
 +            _ = checks.tick() => if let Err(error) = check(config, state, paths, false).await { error!(?error, "periodic update check failed"); },
-             _ = reconcile.tick() => if state.status == UpdateStatus::WaitingForAppExit && !liveness::is_app_running(config)? {
-@@ -75,11 +75,24 @@ async fn daemon(config: &RuntimeConfig, state: &mut PersistedState, paths: &Runt
+             _ = reconcile.tick() => if let Err(error) = reconcile_pending_install(config, state, paths).await {
+                 error!(?error, "deferred install failed");
+             },
+@@ -158,12 +158,22 @@ fn reload_state(
      Ok(())
  }
  
@@ -183,17 +187,15 @@ index 323b69d..4ac9579 100644
          Some(lock) => lock,
          None => { info!("another update check is active"); return Ok(()); }
      };
-+    // Another updater process may have installed a package and persisted its
-+    // result while this daemon was waiting for the lock. Refresh durable state
-+    // before deciding whether the candidate still needs work.
-+    *state = PersistedState::load_or_default(&paths.state_file, config.auto_install_on_app_exit)?;
-+    state.installed_version = install::installed_package_version();
+     reload_state(config, state, paths)?;
++    // A failed check should be re-run when the user asks for one explicitly,
++    // otherwise the daemon would stay stuck on the persisted failure.
 +    if explicit_retry && state.status == UpdateStatus::Failed {
 +        state.status = UpdateStatus::Idle;
 +    }
+     recover_interrupted_check(state);
+     let previous_state = state.clone();
      let previous_status = state.status.clone();
-     let previous_candidate = state.candidate_version.clone();
-     let previous_sha256 = state.upstream_package_sha256.clone();
 diff --git a/updater/src/config.rs b/updater/src/config.rs
 index 9db055a..d639d70 100644
 --- a/updater/src/config.rs
