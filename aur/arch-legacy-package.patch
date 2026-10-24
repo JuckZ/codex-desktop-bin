@@ -1,6 +1,33 @@
+diff --git a/install.sh b/install.sh
+index 250042fb..fa9210fb 100755
+--- a/install.sh
++++ b/install.sh
+@@ -15,7 +15,6 @@ fi
+ INSTALL_DIR="${CODEX_INSTALL_DIR:-$INSTALL_ROOT/$DEFAULT_INSTALL_DIR_NAME}"
+ WORK_DIR="$(mktemp -d)"
+ ARCH="${CODEX_TARGET_ARCH:-$(uname -m)}"
+-ICON_SOURCE="$SCRIPT_DIR/assets/codex-linux.png"
+ 
+ . "$SCRIPT_DIR/scripts/lib/install-helpers.sh"
+ . "$SCRIPT_DIR/scripts/lib/process-detection.sh"
+@@ -92,11 +91,10 @@ create_start_script() {
+ }
+ 
+ stage_community_branding() {
++    local icon_source="$INSTALL_DIR/resources/icon-chatgpt.png"
+     mkdir -p "$INSTALL_DIR/.codex-linux"
+-    if [ -f "$ICON_SOURCE" ]; then
+-        cp "$ICON_SOURCE" "$INSTALL_DIR/.codex-linux/$CODEX_APP_ID.png"
+-        cp "$ICON_SOURCE" "$INSTALL_DIR/resources/icon-chatgpt.png"
+-    fi
++    [ -f "$icon_source" ] || error "Official Linux application icon is missing"
++    cp "$icon_source" "$INSTALL_DIR/.codex-linux/$CODEX_APP_ID.png"
+ }
+ 
+ verify_clean_asar_preserved() {
 diff --git a/packaging/linux/DISCLAIMER.md b/packaging/linux/DISCLAIMER.md
 new file mode 100644
-index 0000000..0cb4284
+index 00000000..0cb42844
 --- /dev/null
 +++ b/packaging/linux/DISCLAIMER.md
 @@ -0,0 +1,37 @@
@@ -43,7 +70,7 @@ index 0000000..0cb4284
 +maintainer email listed in the package recipe.
 diff --git a/packaging/linux/LICENSE.packaging b/packaging/linux/LICENSE.packaging
 new file mode 100644
-index 0000000..b17aeaa
+index 00000000..b17aeaa5
 --- /dev/null
 +++ b/packaging/linux/LICENSE.packaging
 @@ -0,0 +1,21 @@
@@ -69,7 +96,7 @@ index 0000000..b17aeaa
 +OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 +SOFTWARE.
 diff --git a/packaging/linux/PKGBUILD.template b/packaging/linux/PKGBUILD.template
-index 588dae8..37edd62 100644
+index 23e0000d..b3d4a2e4 100644
 --- a/packaging/linux/PKGBUILD.template
 +++ b/packaging/linux/PKGBUILD.template
 @@ -5,7 +5,10 @@ pkgrel=__PKGREL__
@@ -85,7 +112,7 @@ index 588dae8..37edd62 100644
      'polkit'
      'curl'
 diff --git a/packaging/linux/codex-desktop-entry-doctor.sh b/packaging/linux/codex-desktop-entry-doctor.sh
-index 2277fcb..d778060 100644
+index 2277fcb1..d7780607 100644
 --- a/packaging/linux/codex-desktop-entry-doctor.sh
 +++ b/packaging/linux/codex-desktop-entry-doctor.sh
 @@ -38,6 +38,13 @@ codex_desktop_entry_is_legacy_generated() {
@@ -102,11 +129,34 @@ index 2277fcb..d778060 100644
      if grep -Eq 'codex-desktop-open-next|^Actions=NewWindow([;]|$)|^\[Desktop Action NewWindow\]$|^Actions=NewInstance([;]|$)|^\[Desktop Action NewInstance\]$' \
          "$codex_desktop_file"; then
          return 0
+diff --git a/scripts/gentoo-native.test.js b/scripts/gentoo-native.test.js
+index 56741a78..9d52f7ee 100644
+--- a/scripts/gentoo-native.test.js
++++ b/scripts/gentoo-native.test.js
+@@ -159,6 +159,7 @@ function nativePackageFixture(t) {
+   fs.mkdirSync(bin);
+   for (const name of ["ChatGPT", "start.sh", "resources/codex"]) fs.writeFileSync(path.join(app, name), "#!/bin/sh\nexit 0\n", { mode: 0o755 });
+   fs.writeFileSync(path.join(app, "resources/app.asar"), "official fixture ASAR");
++  fs.writeFileSync(path.join(app, "resources/icon-chatgpt.png"), "official fixture icon");
+   fs.writeFileSync(path.join(app, ".codex-linux/upstream-package/control"), `Package: chatgpt\nArchitecture: ${architecture}\n`);
+   const m = { version: "26.930.31730", architecture, sha256: "a".repeat(64), size: 42 };
+   fs.writeFileSync(path.join(dir, "metadata.json"), JSON.stringify(m));
 diff --git a/scripts/lib/package-common.sh b/scripts/lib/package-common.sh
-index ec90862..611a82e 100755
+index 1e03c149..0cc854f3 100755
 --- a/scripts/lib/package-common.sh
 +++ b/scripts/lib/package-common.sh
-@@ -845,9 +845,13 @@ write_update_builder_manifest() {
+@@ -398,7 +398,9 @@ resolve_package_icon_source() {
+         printf '%s\n' "$PACKAGE_ICON_SOURCE"
+         return 0
+     fi
+-    printf '%s\n' "$REPO_DIR/assets/codex-linux.png"
++    # Preserve the current signed payload's official icon for this distribution.
++    # Resolving from APP_DIR also keeps transactional updater rebuilds aligned.
++    printf '%s\n' "$APP_DIR/resources/icon-chatgpt.png"
+ }
+ 
+ render_packaged_runtime_helper() {
+@@ -905,9 +907,13 @@ write_update_builder_manifest() {
  stage_common_package_files() {
      local root="$1"
      local app_root="$root/opt/$PACKAGE_NAME"
@@ -120,7 +170,7 @@ index ec90862..611a82e 100755
  
      if package_with_updater_enabled; then
          ensure_file_exists "$polkit_policy" "polkit policy"
-@@ -858,6 +862,7 @@ stage_common_package_files() {
+@@ -918,6 +924,7 @@ stage_common_package_files() {
          "$root/usr/bin" \
          "$root/usr/share/applications" \
          "$root/usr/share/icons/hicolor/256x256/apps" \
@@ -128,7 +178,7 @@ index ec90862..611a82e 100755
          "$root/etc/apparmor.d"
      if package_with_updater_enabled; then
          mkdir -p \
-@@ -865,6 +870,12 @@ stage_common_package_files() {
+@@ -925,6 +932,12 @@ stage_common_package_files() {
              "$root/usr/share/polkit-1/actions"
      fi
  
@@ -141,73 +191,37 @@ index ec90862..611a82e 100755
      rm -rf "$app_root"
      cp -aT "$APP_DIR" "$app_root"
      mkdir -p "$app_root/.codex-linux"
-diff --git a/updater/src/app.rs b/updater/src/app.rs
-index 323b69d..4ac9579 100644
---- a/updater/src/app.rs
-+++ b/updater/src/app.rs
-@@ -28,7 +28,7 @@ pub async fn run(cli: Cli) -> Result<()> {
- 
-     match cli.command {
-         Commands::Daemon => daemon(&config, &mut state, &paths).await,
--        Commands::CheckNow => check(&config, &mut state, &paths).await,
-+        Commands::CheckNow => check(&config, &mut state, &paths, true).await,
-         Commands::Status { json } => status(&state, json),
-         Commands::Diagnose { json } => diagnose(&config, &state, &paths, json),
-         Commands::InstallReady => install_ready(&config, &mut state, &paths, true).await,
-@@ -56,7 +56,7 @@ fn run_privileged_command(command: &Commands) -> Option<Result<()>> {
- 
- async fn daemon(config: &RuntimeConfig, state: &mut PersistedState, paths: &RuntimePaths) -> Result<()> {
-     time::sleep(config.initial_check_delay_duration()).await;
--    if let Err(error) = check(config, state, paths).await {
-+    if let Err(error) = check(config, state, paths, false).await {
-         error!(?error, "initial update check failed");
-     }
-     let mut checks = time::interval(config.check_interval_duration());
-@@ -67,3 +67,3 @@ async fn daemon(config: &RuntimeConfig, state: &mut PersistedState, paths: &Runt
-         tokio::select! {
--            _ = checks.tick() => if let Err(error) = check(config, state, paths).await { error!(?error, "periodic update check failed"); },
-+            _ = checks.tick() => if let Err(error) = check(config, state, paths, false).await { error!(?error, "periodic update check failed"); },
-             _ = reconcile.tick() => if state.status == UpdateStatus::WaitingForAppExit && !liveness::is_app_running(config)? {
-@@ -75,11 +75,24 @@ async fn daemon(config: &RuntimeConfig, state: &mut PersistedState, paths: &Runt
-     Ok(())
- }
- 
--async fn check(config: &RuntimeConfig, state: &mut PersistedState, paths: &RuntimePaths) -> Result<()> {
-+async fn check(
-+    config: &RuntimeConfig,
-+    state: &mut PersistedState,
-+    paths: &RuntimePaths,
-+    explicit_retry: bool,
-+) -> Result<()> {
-     let _lock = match CheckLock::try_acquire(&paths.state_dir.join("check.lock"))? {
-         Some(lock) => lock,
-         None => { info!("another update check is active"); return Ok(()); }
-     };
-+    // Another updater process may have installed a package and persisted its
-+    // result while this daemon was waiting for the lock. Refresh durable state
-+    // before deciding whether the candidate still needs work.
-+    *state = PersistedState::load_or_default(&paths.state_file, config.auto_install_on_app_exit)?;
-+    state.installed_version = install::installed_package_version();
-+    if explicit_retry && state.status == UpdateStatus::Failed {
-+        state.status = UpdateStatus::Idle;
-+    }
-     let previous_status = state.status.clone();
-     let previous_candidate = state.candidate_version.clone();
-     let previous_sha256 = state.upstream_package_sha256.clone();
+diff --git a/tests/scripts_smoke.sh b/tests/scripts_smoke.sh
+index 9dd564cc..5ed68ad1 100755
+--- a/tests/scripts_smoke.sh
++++ b/tests/scripts_smoke.sh
+@@ -28,8 +28,6 @@ node --test scripts/gentoo-native.test.js scripts/gentoo-install.test.js scripts
+ assert_contains packaging/linux/codex-desktop.desktop '^Name=ChatGPT Community$'
+ assert_contains packaging/linux/codex-desktop.desktop '^Comment=Community Linux distribution based on OpenAI ChatGPT$'
+ assert_contains install.sh 'CODEX_APP_DISPLAY_NAME:-ChatGPT Community'
+-assert_contains install.sh 'cp .*ICON_SOURCE.*CODEX_APP_ID'
+-assert_contains install.sh 'cp .*ICON_SOURCE.*resources/icon-chatgpt.png'
+ assert_contains scripts/lib/package-common.sh 'PACKAGE_DISPLAY_NAME:-ChatGPT Community'
+ assert_contains scripts/build-appimage.sh 'PACKAGE_DISPLAY_NAME:-ChatGPT Community'
+ assert_contains install.sh 'upstream-linux-package.sh'
 diff --git a/updater/src/config.rs b/updater/src/config.rs
-index 9db055a..d639d70 100644
+index 1253bf93..d782a60d 100644
 --- a/updater/src/config.rs
 +++ b/updater/src/config.rs
-@@ -3,7 +3,7 @@
+@@ -3,7 +3,11 @@
  use anyhow::{Context, Result};
  use directories::BaseDirs;
  use serde::{Deserialize, Serialize};
 -use std::{fs, path::PathBuf, time::Duration};
-+use std::{fs, path::{Path, PathBuf}, time::Duration};
++use std::{
++    fs,
++    path::{Path, PathBuf},
++    time::Duration,
++};
  
  const SERVICE_NAME: &str = "codex-update-manager";
  
-@@ -87,10 +87,20 @@ impl RuntimeConfig {
+@@ -87,10 +91,19 @@ impl RuntimeConfig {
              ..Self::default()
          };
          if !value.builder_bundle_root.exists() {
@@ -215,16 +229,15 @@ index 9db055a..d639d70 100644
 -                .parent()
 -                .expect("updater lives below repository root")
 -                .to_path_buf();
-+            // Development fallback. Resolve relative to the executable at
-+            // runtime so release binaries do not embed the build machine's
-+            // CARGO_MANIFEST_DIR (and therefore makepkg's temporary srcdir).
++            // Resolve the development fallback at runtime instead of embedding
++            // makepkg's temporary source directory in the release binary.
 +            let repository_root = std::env::current_dir()
 +                .ok()
 +                .and_then(|directory| find_repository_root(&directory))
 +                .or_else(|| {
-+                    std::env::current_exe().ok().and_then(|executable| {
-+                        find_repository_root(executable.parent()?)
-+                    })
++                    std::env::current_exe()
++                        .ok()
++                        .and_then(|executable| find_repository_root(executable.parent()?))
 +                });
 +            if let Some(repository_root) = repository_root {
 +                value.builder_bundle_root = repository_root;
@@ -232,7 +245,7 @@ index 9db055a..d639d70 100644
          }
          value
      }
-@@ -129,6 +139,13 @@ impl RuntimeConfig {
+@@ -133,6 +146,13 @@ impl RuntimeConfig {
      }
  }
  
@@ -246,8 +259,8 @@ index 9db055a..d639d70 100644
  pub fn effective_feature_config_path(config: &RuntimeConfig) -> Option<PathBuf> {
      config
          .feature_config_path
-@@ -149,4 +166,15 @@ mod tests {
-         assert_eq!(config.app_executable_path, PathBuf::from("/opt/codex-desktop/ChatGPT"));
+@@ -156,4 +176,18 @@ mod tests {
+         );
          Ok(())
      }
 +
@@ -258,7 +271,10 @@ index 9db055a..d639d70 100644
 +        fs::create_dir_all(&updater_dir)?;
 +        fs::write(root.path().join("install.sh"), "#!/bin/sh\n")?;
 +
-+        assert_eq!(find_repository_root(&updater_dir), Some(root.path().to_path_buf()));
++        assert_eq!(
++            find_repository_root(&updater_dir),
++            Some(root.path().to_path_buf())
++        );
 +        Ok(())
 +    }
  }

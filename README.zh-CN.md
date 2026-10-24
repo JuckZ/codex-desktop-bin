@@ -16,12 +16,15 @@ OpenAI 现已发布原生 Linux 软件包，本项目不再下载或转换 `Code
 
 - 验证 OpenAI 签名的稳定版 APT 元数据和软件包 SHA-256；
 - 提取官方 Linux Electron 运行时及随附工具；
-- 未启用可选功能时，保持 `resources/app.asar` 逐字节不变；
+- 没有可选功能或必要的核心兼容补丁需要应用时，保持 `resources/app.asar` 逐字节不变；
 - 生成原生 Arch 软件包；
 - 包含上游事务式更新管理器及回滚支持。
 
 安装后的桌面入口名称为 **ChatGPT Community**，以便与 OpenAI 单独提供的
 `chatgpt` 软件包区分。
+
+本 Arch 打包保留官方签名 Linux 包自带的图标，统一用于桌面入口和托盘；
+更新器重新构建时也会继续使用官方图标。
 
 OpenAI 目前将 Linux 应用标记为预览版，支持的发行版包括 Ubuntu、Debian 和
 Fedora。Arch Linux/CachyOS 尚未列入官方支持范围，因此本仓库继续为这些系统
@@ -131,11 +134,12 @@ makepkg --printsrcinfo > .SRCINFO
 
 ## Wayland
 
-OpenAI 的原生 Wayland 支持目前仍处于实验阶段，建议优先使用默认的 XWayland。
-如需测试原生 Wayland，请在 `~/.config/codex-desktop/electron-flags.conf` 中添加：
+启动器检测到可用的合成器套接字时会自动选择原生 Wayland；ChromeOS Crostini、
+GNOME 多显示器和 WSLg 环境仍使用 X11 后端。显式设置的参数优先。
+如需使用 XWayland，请在 `~/.config/codex-desktop/electron-flags.conf` 中添加：
 
 ```text
---ozone-platform=wayland
+--ozone-platform=x11
 ```
 
 ## 致谢

@@ -18,13 +18,16 @@ or converts `Codex.dmg`. The current build:
 
 - verifies OpenAI's signed stable APT metadata and package SHA-256;
 - extracts the official Linux Electron runtime and bundled tools;
-- preserves `resources/app.asar` byte-for-byte when no optional feature is
-  enabled;
+- preserves `resources/app.asar` byte-for-byte when neither optional features
+  nor required core compatibility patches apply;
 - produces a native Arch package;
 - includes the upstream transactional update manager and rollback support.
 
 The installed desktop entry is **ChatGPT Community** so it remains distinct
 from OpenAI's separate `chatgpt` package.
+
+This Arch distribution preserves the icon from the signed official Linux
+payload for both the desktop launcher and tray, including updater rebuilds.
 
 OpenAI currently documents the Linux app as a preview for supported Ubuntu,
 Debian, and Fedora releases. Arch/CachyOS is not listed as a supported target,
@@ -155,12 +158,13 @@ stable metadata instead of a static version pin.
 
 ## Wayland
 
-OpenAI's native Wayland support is experimental. The default XWayland path is
-recommended first. To test native Wayland, add this line to
+The launcher selects native Wayland when a live compositor socket is available.
+ChromeOS Crostini, GNOME with multiple monitors, and WSLg retain the X11 backend.
+Explicit flags take priority. To use XWayland, add this line to
 `~/.config/codex-desktop/electron-flags.conf`:
 
 ```text
---ozone-platform=wayland
+--ozone-platform=x11
 ```
 
 ## Acknowledgements
