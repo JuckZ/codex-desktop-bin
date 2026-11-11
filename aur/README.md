@@ -9,6 +9,17 @@ The package is named `codex-desktop` for compatibility with its bundled update
 manager. It declares `replaces=('codex-desktop-bin')`, so pacman can migrate
 legacy installations without deleting `~/.codex`.
 
+The current recipe pins upstream commit
+`61b5e818dc0b46ee531994d8bbb09d81e9581843` and official Linux release
+`26.1106.51428`, including the upstream repairs through November 11, 2026.
+Both architecture hashes were checked against OpenAI's signed stable metadata.
+
+[`linux-features.json`](linux-features.json) enables the experimental
+`remote-mobile-control` feature, including **Control other devices**. The recipe
+and latest-build script both pass this configuration to upstream's builder;
+the packaged updater preserves it for future rebuilds. This does not bypass
+account authorization or guarantee server-side Remote availability.
+
 Build:
 
 ```bash

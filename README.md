@@ -23,6 +23,13 @@ or converts `Codex.dmg`. The current build:
 - produces a native Arch package;
 - includes the upstream transactional update manager and rollback support.
 
+This distribution enables upstream's experimental `remote-mobile-control`
+feature through [`aur/linux-features.json`](aur/linux-features.json). It exposes
+**Settings → Connections → Control other devices** on Linux and includes the
+associated enrollment and device-key adaptations. Account authorization and
+server availability still apply. The same configuration is used by local and
+CI builds and is embedded in the updater's rebuild bundle.
+
 The installed desktop entry is **ChatGPT Community** so it remains distinct
 from OpenAI's separate `chatgpt` package.
 
@@ -138,7 +145,12 @@ MAX_BUILD_THREADS=8 ./scripts/build-latest.sh
 PACKAGE_WITH_UPDATER=0 ./scripts/build-latest.sh
 OUTPUT_DIR=/tmp/codex-dist ./scripts/build-latest.sh
 UPSTREAM_DEB=/path/to/chatgpt_amd64.deb ./scripts/build-latest.sh
+CODEX_LINUX_FEATURES_CONFIG=/path/to/features.json ./scripts/build-latest.sh
 ```
+
+The feature-config override must point to an existing JSON file. Use
+`{"enabled":[]}` for a build without optional features. Scratch files default
+to `.work/tmp` on disk; set `TMPDIR` to another disk-backed directory if needed.
 
 ## AUR files
 

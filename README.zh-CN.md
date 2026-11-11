@@ -20,6 +20,12 @@ OpenAI 现已发布原生 Linux 软件包，本项目不再下载或转换 `Code
 - 生成原生 Arch 软件包；
 - 包含上游事务式更新管理器及回滚支持。
 
+本发行版通过 [`aur/linux-features.json`](aur/linux-features.json) 启用上游的
+实验性 `remote-mobile-control` 功能，显示 Linux 上的
+**设置 → 连接 → 控制其他设备**，并包含配套的注册授权与设备密钥适配。
+实际连接仍需满足账号授权和服务端条件。本地构建与 CI 使用同一配置，
+配置及所需功能代码也会打包进更新器，供后续重新构建使用。
+
 安装后的桌面入口名称为 **ChatGPT Community**，以便与 OpenAI 单独提供的
 `chatgpt` 软件包区分。
 
@@ -116,7 +122,12 @@ MAX_BUILD_THREADS=8 ./scripts/build-latest.sh
 PACKAGE_WITH_UPDATER=0 ./scripts/build-latest.sh
 OUTPUT_DIR=/tmp/codex-dist ./scripts/build-latest.sh
 UPSTREAM_DEB=/path/to/chatgpt_amd64.deb ./scripts/build-latest.sh
+CODEX_LINUX_FEATURES_CONFIG=/path/to/features.json ./scripts/build-latest.sh
 ```
+
+自定义功能配置必须是已存在的 JSON 文件。使用 `{"enabled":[]}` 可构建
+不含可选功能的版本。构建临时文件默认放在磁盘上的 `.work/tmp`；如需调整，
+请将 `TMPDIR` 指向其他磁盘目录，避免大型解包任务占满内存中的 `/tmp`。
 
 ## AUR 文件
 

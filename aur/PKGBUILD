@@ -1,7 +1,7 @@
 # Maintainer: JuckZ <juckz@foxmail.com>
 
 pkgname=codex-desktop
-pkgver=2026.10.24.153255
+pkgver=2026.11.11.114325
 pkgrel=1
 pkgdesc="ChatGPT Community for Arch, repackaged from OpenAI's signed official Linux package"
 arch=('x86_64' 'aarch64')
@@ -63,24 +63,26 @@ conflicts=('codex-desktop-bin' 'openai-codex-desktop')
 replaces=('codex-desktop-bin')
 options=(!debug !strip)
 
-_upstream_ref='6f2b12f9062fb76c0f40d5a4b0921c822354c5cb'
-_chatgpt_ver='26.1021.22027'
+_upstream_ref='61b5e818dc0b46ee531994d8bbb09d81e9581843'
+_chatgpt_ver='26.1106.51428'
 source=(
   "codex-desktop-linux::git+https://github.com/ilysenko/codex-desktop-linux.git#commit=${_upstream_ref}"
   'arch-legacy-package.patch'
+  'linux-features.json'
   'LICENSE'
   'DISCLAIMER.md'
 )
 sha256sums=(
   'SKIP'
-  '52f2f3b88ab344c7b3c0d6894529df0e2a5923e97c3fc7294374eba654adeb40'
+  '73836d6f77e8e6e55147adcc4e47dad5b4f47a7023dce109faf561310c9d9eab'
+  '6483718cdc641772937ddf511d4a13c0af963ad338235848ed8d16fb901a23c5'
   '240808ad5dc4e6267fb92e6a77e34d87614b0a934415b70562657534a956d161'
   '75e2921aec7edfbe78906419394dfbaf93fba0373cc6cd92a2d9a49109f383d3'
 )
 source_x86_64=("chatgpt_amd64.deb::https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_${_chatgpt_ver}_amd64.deb")
-sha256sums_x86_64=('eb0831c734f154f93f8ebcf0e17d118da0dea7dc1737dc61a1e71444375bf190')
+sha256sums_x86_64=('8356a7821930b135b741347faccbc43e1692b4424c3eab710a9af56c0bebb135')
 source_aarch64=("chatgpt_arm64.deb::https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_${_chatgpt_ver}_arm64.deb")
-sha256sums_aarch64=('68de1ec44066871e4177ba1ca793ebee6ba238397f13c794e45b14941c1261fb')
+sha256sums_aarch64=('ce49ac9a1efc1b5326504b0169570b8d0973f4b18461fbcc0597bbfe5310a9bb')
 
 prepare() {
   cd "$srcdir/codex-desktop-linux"
@@ -88,6 +90,9 @@ prepare() {
 }
 
 build() {
+  export CODEX_LINUX_FEATURES_CONFIG="$srcdir/linux-features.json"
+  export TMPDIR="${TMPDIR:-$srcdir/codex-build-tmp}"
+  mkdir -p "$TMPDIR"
   local upstream_deb
   case "$CARCH" in
     x86_64) upstream_deb="$srcdir/chatgpt_amd64.deb" ;;

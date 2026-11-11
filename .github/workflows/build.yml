@@ -16,6 +16,7 @@ on:
     paths:
       - ".github/workflows/build.yml"
       - "aur/arch-legacy-package.patch"
+      - "aur/linux-features.json"
       - "scripts/build-latest.sh"
       - "scripts/prepare-pacman-release.sh"
       - "scripts/setup-pacman-repo.sh"

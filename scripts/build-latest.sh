@@ -8,6 +8,7 @@ UPSTREAM_REF="${UPSTREAM_REF:-main}"
 WORK_DIR="${WORK_DIR:-$REPO_ROOT/.work/codex-desktop-linux-official}"
 OUTPUT_DIR="${OUTPUT_DIR:-$REPO_ROOT/dist}"
 MIGRATION_PATCH="$REPO_ROOT/aur/arch-legacy-package.patch"
+CODEX_LINUX_FEATURES_CONFIG="${CODEX_LINUX_FEATURES_CONFIG:-$REPO_ROOT/aur/linux-features.json}"
 UPSTREAM_DEB="${UPSTREAM_DEB:-}"
 PACKAGE_NAME="codex-desktop"
 PACKAGE_DISPLAY_NAME="${PACKAGE_DISPLAY_NAME:-ChatGPT Community}"
@@ -37,6 +38,16 @@ done
   printf 'Missing migration patch: %s\n' "$MIGRATION_PATCH" >&2
   exit 1
 }
+[ -f "$CODEX_LINUX_FEATURES_CONFIG" ] || {
+  printf 'Missing Linux features config: %s\n' "$CODEX_LINUX_FEATURES_CONFIG" >&2
+  exit 1
+}
+export CODEX_LINUX_FEATURES_CONFIG="$(realpath "$CODEX_LINUX_FEATURES_CONFIG")"
+# Extracted application and packaging copies are several GB. Keep the default
+# scratch directory on disk instead of the host's RAM-backed /tmp.
+export TMPDIR="${TMPDIR:-$REPO_ROOT/.work/tmp}"
+mkdir -p "$TMPDIR"
+TMPDIR="$(realpath "$TMPDIR")"
 
 case "$(uname -m)" in
   x86_64|aarch64|arm64) ;;
@@ -53,7 +64,7 @@ case "$WORK_DIR" in
     ;;
 esac
 
-mkdir -p "$(dirname "$WORK_DIR")" "$OUTPUT_DIR"
+mkdir -p "$REPO_ROOT/.work" "$(dirname "$WORK_DIR")" "$OUTPUT_DIR"
 
 if [ ! -d "$WORK_DIR/.git" ]; then
   git clone "$UPSTREAM_URL" "$WORK_DIR"
@@ -83,6 +94,7 @@ trap cleanup EXIT
 git -C "$WORK_DIR" worktree add --detach "$build_dir" "$upstream_commit"
 git -C "$build_dir" submodule update --init --recursive
 git -C "$build_dir" apply "$MIGRATION_PATCH"
+node "$build_dir/scripts/lib/linux-features.js" --enabled
 
 printf 'Building %s from %s at %s\n' \
   "$PACKAGE_NAME" "$UPSTREAM_URL" "$(git -C "$build_dir" rev-parse --short HEAD)"

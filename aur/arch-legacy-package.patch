@@ -130,7 +130,7 @@ index 2277fcb1..d7780607 100644
          "$codex_desktop_file"; then
          return 0
 diff --git a/scripts/gentoo-native.test.js b/scripts/gentoo-native.test.js
-index 56741a78..9d52f7ee 100644
+index 7be674dd..01f6c5a8 100644
 --- a/scripts/gentoo-native.test.js
 +++ b/scripts/gentoo-native.test.js
 @@ -159,6 +159,7 @@ function nativePackageFixture(t) {
@@ -142,10 +142,10 @@ index 56741a78..9d52f7ee 100644
    const m = { version: "26.930.31730", architecture, sha256: "a".repeat(64), size: 42 };
    fs.writeFileSync(path.join(dir, "metadata.json"), JSON.stringify(m));
 diff --git a/scripts/lib/package-common.sh b/scripts/lib/package-common.sh
-index 1e03c149..0cc854f3 100755
+index d856b6f9..970b9524 100755
 --- a/scripts/lib/package-common.sh
 +++ b/scripts/lib/package-common.sh
-@@ -398,7 +398,9 @@ resolve_package_icon_source() {
+@@ -388,7 +388,9 @@ resolve_package_icon_source() {
          printf '%s\n' "$PACKAGE_ICON_SOURCE"
          return 0
      fi
@@ -156,7 +156,7 @@ index 1e03c149..0cc854f3 100755
  }
  
  render_packaged_runtime_helper() {
-@@ -905,9 +907,13 @@ write_update_builder_manifest() {
+@@ -895,9 +897,13 @@ write_update_builder_manifest() {
  stage_common_package_files() {
      local root="$1"
      local app_root="$root/opt/$PACKAGE_NAME"
@@ -170,7 +170,7 @@ index 1e03c149..0cc854f3 100755
  
      if package_with_updater_enabled; then
          ensure_file_exists "$polkit_policy" "polkit policy"
-@@ -918,6 +924,7 @@ stage_common_package_files() {
+@@ -908,6 +914,7 @@ stage_common_package_files() {
          "$root/usr/bin" \
          "$root/usr/share/applications" \
          "$root/usr/share/icons/hicolor/256x256/apps" \
@@ -178,7 +178,7 @@ index 1e03c149..0cc854f3 100755
          "$root/etc/apparmor.d"
      if package_with_updater_enabled; then
          mkdir -p \
-@@ -925,6 +932,12 @@ stage_common_package_files() {
+@@ -915,6 +922,12 @@ stage_common_package_files() {
              "$root/usr/share/polkit-1/actions"
      fi
  
@@ -192,15 +192,17 @@ index 1e03c149..0cc854f3 100755
      cp -aT "$APP_DIR" "$app_root"
      mkdir -p "$app_root/.codex-linux"
 diff --git a/tests/scripts_smoke.sh b/tests/scripts_smoke.sh
-index 9dd564cc..5ed68ad1 100755
+index b3dccfbb..4126ccb1 100755
 --- a/tests/scripts_smoke.sh
 +++ b/tests/scripts_smoke.sh
-@@ -28,8 +28,6 @@ node --test scripts/gentoo-native.test.js scripts/gentoo-install.test.js scripts
- assert_contains packaging/linux/codex-desktop.desktop '^Name=ChatGPT Community$'
- assert_contains packaging/linux/codex-desktop.desktop '^Comment=Community Linux distribution based on OpenAI ChatGPT$'
+@@ -66,8 +66,8 @@ if command -v desktop-file-validate >/dev/null 2>&1; then
+ fi
+ rm -rf "$desktop_fixture"
  assert_contains install.sh 'CODEX_APP_DISPLAY_NAME:-ChatGPT Community'
 -assert_contains install.sh 'cp .*ICON_SOURCE.*CODEX_APP_ID'
 -assert_contains install.sh 'cp .*ICON_SOURCE.*resources/icon-chatgpt.png'
++assert_contains install.sh 'local icon_source=.*INSTALL_DIR/resources/icon-chatgpt.png'
++assert_contains install.sh 'cp .*icon_source.*CODEX_APP_ID'
  assert_contains scripts/lib/package-common.sh 'PACKAGE_DISPLAY_NAME:-ChatGPT Community'
  assert_contains scripts/build-appimage.sh 'PACKAGE_DISPLAY_NAME:-ChatGPT Community'
  assert_contains install.sh 'upstream-linux-package.sh'
