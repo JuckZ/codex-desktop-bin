@@ -14,7 +14,8 @@ Arch/CachyOS support in this repository remains community-maintained.
 - Upstream maintainer scripts are not executed; only the data payload is used.
 - With no optional ASAR feature enabled and no required core patch, the official
   `resources/app.asar` remains byte-for-byte identical. This distribution opts
-  into `remote-mobile-control`; its ASAR changes are recorded in the patch report.
+  into `remote-mobile-control` and `remote-control-ui`; their ASAR changes are
+  recorded in the patch report.
 - The old macOS DMG conversion and its redistribution caveat no longer apply.
 
 The AUR recipe pins a concrete upstream commit and official package hash. The
@@ -22,8 +23,9 @@ local latest-build script follows the signed stable index and records the
 resolved version and digest inside the application build metadata.
 
 Both build paths use the tracked `aur/linux-features.json` configuration. The
-update-builder bundle includes that configuration and the enabled feature's
-code/resources, so an update retains the outbound-control adaptations. The
+update-builder bundle includes that configuration and both enabled features'
+code/resources, so an update retains the outbound-control adaptations and
+composer remote picker. The
 bundle is a source snapshot: if a new official release breaks its patch
 anchors, rebuild this repository against current upstream source to refresh it.
 

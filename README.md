@@ -23,12 +23,16 @@ or converts `Codex.dmg`. The current build:
 - produces a native Arch package;
 - includes the upstream transactional update manager and rollback support.
 
-This distribution enables upstream's experimental `remote-mobile-control`
-feature through [`aur/linux-features.json`](aur/linux-features.json). It exposes
-**Settings → Connections → Control other devices** on Linux and includes the
-associated enrollment and device-key adaptations. Account authorization and
-server availability still apply. The same configuration is used by local and
-CI builds and is embedded in the updater's rebuild bundle.
+This distribution enables upstream's experimental `remote-mobile-control` and
+`remote-control-ui` features through
+[`aur/linux-features.json`](aur/linux-features.json). Together they expose
+**Settings → Connections → Control other devices** and the composer's
+**Work in → Remote** entry on Linux, and include the associated enrollment and
+device-key adaptations. The settings tab and composer have separate visibility
+gates, so `remote-mobile-control` alone does not enable the remote picker.
+Account authorization, project eligibility, and server availability still apply.
+The same configuration is used by local and CI builds and is embedded in the
+updater's rebuild bundle.
 
 The installed desktop entry is **ChatGPT Community** so it remains distinct
 from OpenAI's separate `chatgpt` package.

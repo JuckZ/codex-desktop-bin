@@ -1,6 +1,6 @@
 pkgbase = codex-desktop
 	pkgdesc = ChatGPT Community for Arch, repackaged from OpenAI's signed official Linux package
-	pkgver = 2026.11.11.114325
+	pkgver = 2026.11.12.135415
 	pkgrel = 1
 	url = https://github.com/JuckZ/codex-desktop-bin
 	install = codex-desktop.install
@@ -58,14 +58,14 @@ pkgbase = codex-desktop
 	replaces = codex-desktop-bin
 	options = !debug
 	options = !strip
-	source = codex-desktop-linux::git+https://github.com/ilysenko/codex-desktop-linux.git#commit=61b5e818dc0b46ee531994d8bbb09d81e9581843
+	source = codex-desktop-linux::git+https://github.com/ilysenko/codex-desktop-linux.git#commit=685ef54d05ae054bce932566399a79fa8282b43d
 	source = arch-legacy-package.patch
 	source = linux-features.json
 	source = LICENSE
 	source = DISCLAIMER.md
 	sha256sums = SKIP
 	sha256sums = 73836d6f77e8e6e55147adcc4e47dad5b4f47a7023dce109faf561310c9d9eab
-	sha256sums = 6483718cdc641772937ddf511d4a13c0af963ad338235848ed8d16fb901a23c5
+	sha256sums = 23f3651641c1d2deb6f276cdee8a174ff77b28a169e0425bfa755741e2a523c0
 	sha256sums = 240808ad5dc4e6267fb92e6a77e34d87614b0a934415b70562657534a956d161
 	sha256sums = 75e2921aec7edfbe78906419394dfbaf93fba0373cc6cd92a2d9a49109f383d3
 	source_x86_64 = chatgpt_amd64.deb::https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1106.51428_amd64.deb

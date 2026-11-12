@@ -1,7 +1,7 @@
 # Maintainer: JuckZ <juckz@foxmail.com>
 
 pkgname=codex-desktop
-pkgver=2026.11.11.114325
+pkgver=2026.11.12.135415
 pkgrel=1
 pkgdesc="ChatGPT Community for Arch, repackaged from OpenAI's signed official Linux package"
 arch=('x86_64' 'aarch64')
@@ -63,7 +63,7 @@ conflicts=('codex-desktop-bin' 'openai-codex-desktop')
 replaces=('codex-desktop-bin')
 options=(!debug !strip)
 
-_upstream_ref='61b5e818dc0b46ee531994d8bbb09d81e9581843'
+_upstream_ref='685ef54d05ae054bce932566399a79fa8282b43d'
 _chatgpt_ver='26.1106.51428'
 source=(
   "codex-desktop-linux::git+https://github.com/ilysenko/codex-desktop-linux.git#commit=${_upstream_ref}"
@@ -75,7 +75,7 @@ source=(
 sha256sums=(
   'SKIP'
   '73836d6f77e8e6e55147adcc4e47dad5b4f47a7023dce109faf561310c9d9eab'
-  '6483718cdc641772937ddf511d4a13c0af963ad338235848ed8d16fb901a23c5'
+  '23f3651641c1d2deb6f276cdee8a174ff77b28a169e0425bfa755741e2a523c0'
   '240808ad5dc4e6267fb92e6a77e34d87614b0a934415b70562657534a956d161'
   '75e2921aec7edfbe78906419394dfbaf93fba0373cc6cd92a2d9a49109f383d3'
 )

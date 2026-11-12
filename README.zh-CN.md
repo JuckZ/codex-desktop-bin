@@ -21,9 +21,11 @@ OpenAI 现已发布原生 Linux 软件包，本项目不再下载或转换 `Code
 - 包含上游事务式更新管理器及回滚支持。
 
 本发行版通过 [`aur/linux-features.json`](aur/linux-features.json) 启用上游的
-实验性 `remote-mobile-control` 功能，显示 Linux 上的
-**设置 → 连接 → 控制其他设备**，并包含配套的注册授权与设备密钥适配。
-实际连接仍需满足账号授权和服务端条件。本地构建与 CI 使用同一配置，
+实验性 `remote-mobile-control` 和 `remote-control-ui` 功能，显示 Linux 上的
+**设置 → 连接 → 控制其他设备**与输入框的**工作位置 → 远程**入口，
+并包含配套的注册授权与设备密钥适配。设置页和输入框受不同的显示开关控制，
+仅启用 `remote-mobile-control` 不会打开远程电脑选择器。
+实际连接仍需满足账号授权、项目适用性和服务端条件。本地构建与 CI 使用同一配置，
 配置及所需功能代码也会打包进更新器，供后续重新构建使用。
 
 安装后的桌面入口名称为 **ChatGPT Community**，以便与 OpenAI 单独提供的
