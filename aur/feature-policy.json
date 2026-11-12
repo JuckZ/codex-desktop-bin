@@ -1,0 +1,913 @@
+{
+  "schemaVersion": 1,
+  "profile": "cachyos-kde-full",
+  "reviewedUpstream": "685ef54d05ae054bce932566399a79fa8282b43d",
+  "target": "Arch/CachyOS KDE Wayland; amd64/arm64 source builds, amd64 release",
+  "features": {
+    "account-switcher": {
+      "status": "conditional",
+      "reason": "会强制文件凭据存储并影响共享 CLI 登录；需用户另行选择凭据迁移。",
+      "manifestSha256": "fc2d18d7ee2083570b21209fe3958f4137568bc61cd468f0658c208899df4f24",
+      "public": true
+    },
+    "agent-workspace": {
+      "status": "enabled",
+      "reason": "提供工作区设置与技能；后端需在界面另行安装，安装本包不会启动隐藏桌面。",
+      "manifestSha256": "3c7dbb63ff0756762d85593acfc91c334de525fca9bb558dd090b8fb7c2c7874",
+      "public": true
+    },
+    "api-key-model-visibility": {
+      "status": "enabled",
+      "reason": "API Key 模式显示 CLI 返回的非隐藏模型；保留模型访问权限检查。",
+      "manifestSha256": "0953849e3400c89811659fbc11afd2ec5edde5425597b3acab61b5f880f0bf61",
+      "public": true
+    },
+    "api-key-service-tier": {
+      "status": "enabled",
+      "reason": "提供 API Key Fast/serviceTier 选择能力；需服务商支持，不自动选择付费加速。",
+      "manifestSha256": "fdd8e8725589671d9353e4c9021dfb755755b34fbf752b53f75a2a8f0396a3ef",
+      "public": true
+    },
+    "appshots": {
+      "status": "conditional",
+      "reason": "当前安全目标截图路径不支持本机 KDE；等待上游支持。原生电脑操作截图另已包含。",
+      "manifestSha256": "e311653d55343761d2548d6c249adddc572cb8db581d010024b0ba3d983670ed",
+      "public": true
+    },
+    "authenticated-proxy": {
+      "status": "conditional",
+      "reason": "需要带凭据的代理配置；未建立该需求，避免自动改写 Electron 网络路径。",
+      "manifestSha256": "6d6ebe305694e48187eabb9fc5513e6e2f64ba46c1d7fa24778a3c2aea7a6c6b",
+      "public": true
+    },
+    "authored-message-visibility": {
+      "status": "enabled",
+      "reason": "保留用户编写的消息在历史记录中的可见性。",
+      "manifestSha256": "28159ad5e58611a4ee91fcb5a2ddfbd30e29afda22e741458770a6fb4bc06950",
+      "public": true
+    },
+    "automation-extensions": {
+      "status": "enabled",
+      "reason": "补齐自动化编辑与运行入口；任务仍由用户创建。",
+      "manifestSha256": "50e1c30504e12a9b773ace07d6659d39b8af6cf5488d40d9934303b19b64e118",
+      "public": true
+    },
+    "browser-proxy": {
+      "status": "enabled",
+      "reason": "向浏览器助手传递已明确配置的代理环境，不创建或改写代理配置。",
+      "manifestSha256": "226a70be22657e693498aefb61bcf88827eea2f1a908ed135d8eab799f380532",
+      "public": true
+    },
+    "chatgpt-dil-markdown-fallback": {
+      "status": "enabled",
+      "reason": "补齐 Markdown 回退显示。",
+      "manifestSha256": "39bf9a054cd7576731a2f2f8cd81c061a28718dba9ea009857dfe4db61e2c1bd",
+      "public": true
+    },
+    "chatgpt-dots-any-country": {
+      "status": "excluded",
+      "reason": "移除地区可见性门槛不能授予服务端权限，不作为本发行版完整性要求。",
+      "manifestSha256": "92a584ce2c77e8dd3e879856853a8df5e85e3c98987c8df979ce3ad38b965736",
+      "public": true
+    },
+    "chatgpt-sidebar-separate-history": {
+      "status": "enabled",
+      "reason": "提供 ChatGPT 与 Codex 历史分组。",
+      "manifestSha256": "f12210e98bba168fc1eb47d7b5ceb734706f3b189ba1fbb883b27268ee215eb2",
+      "public": true
+    },
+    "chronicle-skysight": {
+      "status": "enabled",
+      "reason": "提供活动记忆入口及本地后端；必须运行时主动开启才录制。",
+      "manifestSha256": "fce1566f544247229bcc37d6b9cb16110d959c805ea0e69276497a2b7a1f93f1",
+      "public": true
+    },
+    "codex-micro": {
+      "status": "conditional",
+      "reason": "仅适用于配套硬件，当前未确认设备。",
+      "manifestSha256": "795e41639150ce965babad675336523006b016eacc2e63bec244c3543e6ea890",
+      "public": true
+    },
+    "community-features-in-gui-settings": {
+      "status": "enabled",
+      "reason": "在设置中展示已安装与未安装功能、子功能、依赖和冲突。",
+      "manifestSha256": "6d84c3ac984d3ff2949c39d22639a471efb0547ab29dddf88967b8a7aef2c4b2",
+      "public": true
+    },
+    "community-profile-isolation": {
+      "status": "excluded",
+      "reason": "会改变 CODEX_HOME、登录和历史配置；本次保留用户现有桌面及 CLI 数据。",
+      "manifestSha256": "2a8aa2d7f92b81e8db9f9c2a2ffb3d444df7239b09e90a787c45254aefdfedd4",
+      "public": true
+    },
+    "computer-use-linux": {
+      "status": "enabled",
+      "reason": "包含 Linux 原生电脑操作、窗口选择和全部原生辅助程序；保留运行时权限。",
+      "manifestSha256": "009a07d3edbdc76f5fa1014b253ca3b88dc1fef94ec93295a4de975953cf0dab",
+      "public": true
+    },
+    "copilot-reasoning-effort": {
+      "status": "conditional",
+      "reason": "仅适用于 Copilot 认证，当前使用 API 认证。",
+      "manifestSha256": "b4ae186dc0952f380518dc75635fa84a95264a337f70feafeeade0e6ea0467da",
+      "public": true
+    },
+    "desktop-identity": {
+      "status": "enabled",
+      "reason": "正确识别社区版桌面入口；发行版保留用户要求的官方图标。",
+      "manifestSha256": "daf063cb367bde402d0273f65f5182bb5ff0438f5603636267978ac0ccdd366f",
+      "public": true
+    },
+    "desktop-new-window": {
+      "status": "enabled",
+      "reason": "补齐桌面新窗口入口。",
+      "manifestSha256": "f5de65427a80277be63ea0eb5262bd879cc456303018c25aa10750f92e3df897",
+      "public": true
+    },
+    "directory-only-working-tree-watch": {
+      "status": "enabled",
+      "reason": "使用有界目录监听及固定版本 Watchbound；与浅层监听方案二选一。",
+      "manifestSha256": "ed6b96b63f805a33a0455dcb19dcc42130f8a7475cc4272a069e1b1044d5823c",
+      "public": true
+    },
+    "filesystem-root-follow-ups": {
+      "status": "enabled",
+      "reason": "修复根目录项目的后续操作。",
+      "manifestSha256": "34a280d1247f8320ee9711766dea35bdfa03895385bb9e4695b7ac804b61ff1c",
+      "public": true
+    },
+    "flatpak-chrome-native-messaging": {
+      "status": "conditional",
+      "reason": "仅适用于 Flatpak Chrome；当前为原生 Chrome。",
+      "manifestSha256": "7ad8b8c0e74099e434a69e34ee43b761ebd3b2d058f87669cc5ca8999a4274be",
+      "public": true
+    },
+    "fork-sidebar-fallback": {
+      "status": "enabled",
+      "reason": "提供分叉会话侧栏回退。",
+      "manifestSha256": "e5687cbce6a605b0d9fa71d185b0bd693fddc6b0a05aab732cb3d105862a2cff",
+      "public": true
+    },
+    "frameless-titlebar": {
+      "status": "excluded",
+      "reason": "仅为无边框外观偏好，保留 KDE 原生窗口装饰。",
+      "manifestSha256": "dd519d43e5b6feea5334773ac8da68ccf86ca659b3dd4b21dedcd5eb7f065d64",
+      "public": true
+    },
+    "global-dictation": {
+      "status": "enabled",
+      "reason": "提供全局听写与原生辅助程序；麦克风和快捷键按使用时授权。",
+      "manifestSha256": "aa3909af81643260a9e25bd0fb2873f1aa54837b6510cd9807aa72d6c093321d",
+      "public": true
+    },
+    "global-dictation-gnome": {
+      "status": "excluded",
+      "reason": "GNOME 专用；目标环境为 KDE Wayland。",
+      "manifestSha256": "88727bd3006a0176712dc871e0ac1f8dbb51eea2a76656b598c58b676153e093",
+      "public": true
+    },
+    "linux-performance-workarounds": {
+      "status": "conditional",
+      "reason": "针对已复现性能问题的动画降级策略；本机尚无对应诊断。",
+      "manifestSha256": "8d2bede9a233c0e7df13e7da2995d670cee5edcd8059c14147e9ffdb5fa651ce",
+      "public": true
+    },
+    "mcp-helper-reaper": {
+      "status": "enabled",
+      "reason": "回收已确认失去所属 Codex 进程的 MCP 助手；不回收活跃会话。",
+      "manifestSha256": "868d62f17da62206ad585190aa0fb79161243afd375d56acdc90f9f2abaa1579",
+      "public": true
+    },
+    "model-picker-default-presets": {
+      "status": "conditional",
+      "reason": "必须提供用户认可的模型与推理强度组合，不能代替用户编造。",
+      "manifestSha256": "a0d61ad79bc060c6dc2d548f9def6be6eeeff951f6e5d27a75678592c8f03dae",
+      "public": true
+    },
+    "nix-store-bundled-marketplace-permissions": {
+      "status": "excluded",
+      "reason": "Nix 内部模块，不适用于 pacman 包。",
+      "manifestSha256": "a3b531eceafa4cf73544ff8258a0435cb2ee26f22ae74bec63759639e7c63d02",
+      "public": false
+    },
+    "node-repl-reaper": {
+      "status": "enabled",
+      "reason": "回收浏览器遗留 node_repl 进程；保留活跃祖先进程检查。",
+      "manifestSha256": "878008c866ee10b0cbb949def4a64137413bd72ae48618ff468a932553015307",
+      "public": true
+    },
+    "omarchy-theme": {
+      "status": "excluded",
+      "reason": "Omarchy 专用主题，与本机 KDE 不适用。",
+      "manifestSha256": "58fde3a4c8a7e5a66c9e9a96d4562ab560f1ce13a2397b436276d4a38ca82012",
+      "public": true
+    },
+    "persistent-status-panel": {
+      "status": "enabled",
+      "reason": "保留可查看的任务状态面板。",
+      "manifestSha256": "b8689439600481719aefe02ed227f3e0128475ad52a00fedb458e28c93d00a8f",
+      "public": true
+    },
+    "pet-overlay": {
+      "status": "enabled",
+      "reason": "提供 KDE 桌面宠物及 KWin 辅助程序；仅在使用宠物时运行。",
+      "manifestSha256": "f67b78a1ab57aab591ff4902dc6a63ea095feb88954c5b23bfcb462315c2ab1a",
+      "public": true
+    },
+    "preferred-editor-file-links": {
+      "status": "enabled",
+      "reason": "文件链接遵守首选编辑器。",
+      "manifestSha256": "15c96d99e8971b817a8e22769022d633916ae1af7521d0b96af95d614ca28851",
+      "public": true
+    },
+    "project-group-last-updated-sort": {
+      "status": "enabled",
+      "reason": "提供项目组最近更新时间排序。",
+      "manifestSha256": "de90cdc6ee63a6d40cd5abf3e91d9797dffa194fa0825a9bfb16cfabd0c222f6",
+      "public": true
+    },
+    "project-task-sort": {
+      "status": "enabled",
+      "reason": "提供项目任务排序。",
+      "manifestSha256": "7e3481326e34dbc7e1d02df89159dfb4d48703ad67f3aa12a2acf3f4fb32c21d",
+      "public": true
+    },
+    "read-aloud": {
+      "status": "enabled",
+      "reason": "提供点击朗读及声音设置；不在安装或启动时下载语音模型。",
+      "manifestSha256": "abbc6ff228a36ce10a44eeafa286daafc4d287c0a082814fed247b15f952db3b",
+      "public": true
+    },
+    "read-aloud-mcp": {
+      "status": "enabled",
+      "reason": "包含朗读 MCP 后端；实际语音模型由用户后续安装。",
+      "manifestSha256": "49466f737f468dcf26863cdc34ce43f8d77b3bef07e067733628c262d3b6c97d",
+      "public": true
+    },
+    "reasoning-visibility": {
+      "status": "enabled",
+      "reason": "显示服务已提供的推理摘要及相应设置。",
+      "manifestSha256": "71e38e8b49a11345522973a69a1f6e6a689dfd4f6f1f61d56639a16edb65024f",
+      "public": true
+    },
+    "record-and-replay": {
+      "status": "enabled",
+      "reason": "补齐录制与回放工作流，依赖活动记忆；保留运行时主动开启。",
+      "manifestSha256": "538b7f2bf8c2f96132f4f70d00ee7d67df4b78babb2900382af436bab9096339",
+      "public": true
+    },
+    "remote-control-ui": {
+      "status": "enabled",
+      "reason": "补齐聊天输入框的远程工作位置选择，与远程控制设置成组启用。",
+      "manifestSha256": "cf7f8cf8bd280de29e6dda860bd07d62e1094a0ffb2f8754f16ef7eacdeffb49",
+      "public": true
+    },
+    "remote-mobile-control": {
+      "status": "enabled",
+      "reason": "补齐远程控制设置及设备连接工作流；设备仍需用户配对授权。",
+      "manifestSha256": "7beb834406837ef43fe4854707cd8f6f19b5dc1629e7f2889fd97c9749f61174",
+      "public": true
+    },
+    "shallow-repository-watches": {
+      "status": "excluded",
+      "reason": "与已选择的 directory-only-working-tree-watch 冲突，会减少深层更新监听。",
+      "manifestSha256": "93e1debeb5169078fd63a4fbdb2d5b3a392c6d2472c69e9b0ef058772713f755",
+      "public": true
+    },
+    "shared-app-server-socket": {
+      "status": "excluded",
+      "reason": "改变桌面与 CLI 的共享执行权限与生命周期；保持独立 CLI，亦避免账户切换冲突。",
+      "manifestSha256": "623c5f72556fcdce5f3509465d4300834d54bde12c2186aa7628522bb51136d8",
+      "public": true
+    },
+    "start-minimized-to-tray": {
+      "status": "enabled",
+      "reason": "提供两种托盘启动开关；默认关闭，不自动修改登录自启动。",
+      "manifestSha256": "33152f42163e1bf04f4974fa287edc242d54d385720461c93b1203dd56ec060e",
+      "public": true
+    },
+    "thorium-chrome-plugin": {
+      "status": "conditional",
+      "reason": "仅适用于 Thorium 浏览器，当前未使用。",
+      "manifestSha256": "5f1d9cba9759522e89000683948aa8671605d9845dba77ea44a7299171b54266",
+      "public": true
+    },
+    "tray-usage": {
+      "status": "enabled",
+      "reason": "提供托盘用量显示。",
+      "manifestSha256": "c3c552836cdd4b27483aa14c94867fc7fd972bc5ecb0244fcd19e8d253018b5e",
+      "public": true
+    },
+    "ui-tweaks": {
+      "status": "enabled",
+      "reason": "启用字体、建议提示与选中文本操作；保留图标、语言及侧栏样式，关闭未适配模型列表。",
+      "manifestSha256": "61b562ff84c081bdfd7659e8f7705d122bd0e54c16dd27bc7c9562f3be9adceb",
+      "public": true
+    },
+    "usage-limit-send-attempt": {
+      "status": "conditional",
+      "reason": "改变配额耗尽时的发送行为；需明确选择该策略。",
+      "manifestSha256": "2b9a3fbcfac16416c7957332c84e6704c773d6d9ee53b771b1a2cb79764b4531",
+      "public": true
+    },
+    "wayland-global-shortcuts": {
+      "status": "enabled",
+      "reason": "通过 KDE GlobalShortcuts portal 提供全局快捷键；保留桌面授权。",
+      "manifestSha256": "4853c5892af718c27cb2382f15ee709442a57889082ecb8fe6b5ff915151b04a",
+      "public": true
+    }
+  },
+  "requiredGroups": {
+    "remote-computers": [
+      "remote-mobile-control",
+      "remote-control-ui"
+    ],
+    "native-computer-control": [
+      "computer-use-linux"
+    ],
+    "wayland-shortcuts": [
+      "wayland-global-shortcuts",
+      "global-dictation"
+    ],
+    "api-models-and-speed": [
+      "api-key-model-visibility",
+      "api-key-service-tier"
+    ],
+    "activity-memory": [
+      "chronicle-skysight",
+      "record-and-replay"
+    ],
+    "speech": [
+      "read-aloud",
+      "read-aloud-mcp"
+    ],
+    "feature-catalog": [
+      "community-features-in-gui-settings"
+    ]
+  },
+  "settings": {
+    "ui-tweaks": {
+      "tweaks": {
+        "appearance": {
+          "dockIcon": {
+            "enabled": false
+          },
+          "uiFontSize": {
+            "enabled": true,
+            "max": 24
+          },
+          "customFontInput": {
+            "enabled": true
+          }
+        },
+        "home": {
+          "suggestedPrompts": {
+            "enabled": true
+          }
+        },
+        "modelPicker": {
+          "showModelsByDefault": {
+            "enabled": false
+          }
+        },
+        "reasoning": {
+          "keepEffortLabelsEnglish": {
+            "enabled": false
+          }
+        },
+        "selection": {
+          "moreDetails": {
+            "enabled": true
+          },
+          "annotationSubmit": {
+            "enabled": true
+          }
+        },
+        "sidebar": {
+          "projectName": {
+            "enabled": false
+          }
+        }
+      }
+    }
+  },
+  "nativeArtifacts": [
+    {
+      "feature": "computer-use-linux",
+      "app": "resources/plugins/openai-bundled/plugins/unified-computer-use/bin/codex-computer-use-linux",
+      "builder": "target/release/codex-computer-use-linux"
+    },
+    {
+      "feature": "computer-use-linux",
+      "app": "resources/plugins/openai-bundled/plugins/unified-computer-use/bin/codex-computer-use-cosmic",
+      "builder": "target/release/codex-computer-use-cosmic"
+    },
+    {
+      "feature": "computer-use-linux",
+      "app": "resources/plugins/openai-bundled/plugins/unified-computer-use/bin/codex-computer-use-indicator",
+      "builder": "target/release/codex-computer-use-indicator"
+    },
+    {
+      "feature": "global-dictation",
+      "app": "resources/native/codex-global-dictation-linux",
+      "builder": "global-dictation-linux/target/release/codex-global-dictation-linux"
+    },
+    {
+      "feature": "pet-overlay",
+      "app": "resources/native/codex-pet-kwin",
+      "builder": "linux-features/pet-overlay/kwin-helper/target/release/codex-pet-kwin"
+    },
+    {
+      "feature": "mcp-helper-reaper",
+      "app": ".codex-linux/mcp-helper-reaper/codex-mcp-helper-reaper",
+      "builder": "linux-features/mcp-helper-reaper/reaper/target/release/codex-mcp-helper-reaper"
+    },
+    {
+      "feature": "read-aloud-mcp",
+      "app": "resources/plugins/openai-bundled/plugins/read-aloud/bin/codex-read-aloud-linux",
+      "builder": "target/release/codex-read-aloud-linux"
+    },
+    {
+      "feature": "chronicle-skysight",
+      "app": "resources/native/codex-record-replay-linux",
+      "builder": "target/release/codex-record-replay-linux"
+    }
+  ],
+  "patches": [
+    {
+      "id": "feature:agent-workspace:main-bridge",
+      "feature": "agent-workspace",
+      "required": true
+    },
+    {
+      "id": "feature:agent-workspace:settings-page",
+      "feature": "agent-workspace",
+      "required": true
+    },
+    {
+      "id": "feature:api-key-model-visibility:api-key-model-visibility-ui",
+      "feature": "api-key-model-visibility",
+      "required": true
+    },
+    {
+      "id": "feature:api-key-service-tier:api-key-service-tier-gate",
+      "feature": "api-key-service-tier",
+      "required": true
+    },
+    {
+      "id": "feature:api-key-service-tier:api-key-service-tier-model",
+      "feature": "api-key-service-tier",
+      "required": true
+    },
+    {
+      "id": "feature:api-key-service-tier:api-key-service-tier-resolver",
+      "feature": "api-key-service-tier",
+      "required": true
+    },
+    {
+      "id": "feature:api-key-service-tier:api-key-service-tier-fallback",
+      "feature": "api-key-service-tier",
+      "required": true
+    },
+    {
+      "id": "feature:authored-message-visibility:persistent-messages",
+      "feature": "authored-message-visibility",
+      "required": true
+    },
+    {
+      "id": "feature:automation-extensions:multi-time-rrule",
+      "feature": "automation-extensions",
+      "required": true
+    },
+    {
+      "id": "feature:automation-extensions:eager-automation-update",
+      "feature": "automation-extensions",
+      "required": true
+    },
+    {
+      "id": "feature:chatgpt-dil-markdown-fallback:chatgpt-dil-markdown-fallback",
+      "feature": "chatgpt-dil-markdown-fallback",
+      "required": true
+    },
+    {
+      "id": "feature:chatgpt-sidebar-separate-history:source-preference",
+      "feature": "chatgpt-sidebar-separate-history",
+      "required": true
+    },
+    {
+      "id": "feature:chronicle-skysight:linux-chronicle-skysight-main-bridge",
+      "feature": "chronicle-skysight",
+      "required": true
+    },
+    {
+      "id": "feature:community-features-in-gui-settings:general-list",
+      "feature": "community-features-in-gui-settings",
+      "required": true
+    },
+    {
+      "id": "feature:computer-use-linux:unified-runtime",
+      "feature": "computer-use-linux",
+      "required": true
+    },
+    {
+      "id": "feature:computer-use-linux:avatar-cursor",
+      "feature": "computer-use-linux",
+      "required": true
+    },
+    {
+      "id": "feature:computer-use-linux:ui-feature",
+      "feature": "computer-use-linux",
+      "required": true
+    },
+    {
+      "id": "feature:computer-use-linux:plugin-gate",
+      "feature": "computer-use-linux",
+      "required": true
+    },
+    {
+      "id": "feature:computer-use-linux:native-applications",
+      "feature": "computer-use-linux",
+      "required": true
+    },
+    {
+      "id": "feature:computer-use-linux:ui-availability",
+      "feature": "computer-use-linux",
+      "required": true
+    },
+    {
+      "id": "feature:computer-use-linux:host-platform",
+      "feature": "computer-use-linux",
+      "required": true
+    },
+    {
+      "id": "feature:computer-use-linux:native-settings-visibility",
+      "feature": "computer-use-linux",
+      "required": true
+    },
+    {
+      "id": "feature:desktop-identity:package-desktop-name",
+      "feature": "desktop-identity",
+      "required": true
+    },
+    {
+      "id": "feature:desktop-new-window:second-instance",
+      "feature": "desktop-new-window",
+      "required": false
+    },
+    {
+      "id": "feature:directory-only-working-tree-watch:watchbound-package",
+      "feature": "directory-only-working-tree-watch",
+      "required": true
+    },
+    {
+      "id": "feature:directory-only-working-tree-watch:worker-directory-watch",
+      "feature": "directory-only-working-tree-watch",
+      "required": true
+    },
+    {
+      "id": "feature:filesystem-root-follow-ups:workspace-submission",
+      "feature": "filesystem-root-follow-ups",
+      "required": true
+    },
+    {
+      "id": "feature:fork-sidebar-fallback:sidebar-settings",
+      "feature": "fork-sidebar-fallback",
+      "required": true
+    },
+    {
+      "id": "feature:global-dictation:linux-global-dictation-main-process",
+      "feature": "global-dictation",
+      "required": true
+    },
+    {
+      "id": "feature:persistent-status-panel:composer-status-state",
+      "feature": "persistent-status-panel",
+      "required": true
+    },
+    {
+      "id": "feature:pet-overlay:pet-overlay-kwin-gesture",
+      "feature": "pet-overlay",
+      "required": true
+    },
+    {
+      "id": "feature:pet-overlay:pet-overlay-main",
+      "feature": "pet-overlay",
+      "required": true
+    },
+    {
+      "id": "feature:pet-overlay:pet-overlay-hidden-focus",
+      "feature": "pet-overlay",
+      "required": true
+    },
+    {
+      "id": "feature:preferred-editor-file-links:plain-file-click",
+      "feature": "preferred-editor-file-links",
+      "required": true
+    },
+    {
+      "id": "feature:project-group-last-updated-sort:last-updated-project-groups",
+      "feature": "project-group-last-updated-sort",
+      "required": true
+    },
+    {
+      "id": "feature:project-task-sort:creation-time",
+      "feature": "project-task-sort",
+      "required": true
+    },
+    {
+      "id": "feature:read-aloud:main-handler",
+      "feature": "read-aloud",
+      "required": true
+    },
+    {
+      "id": "feature:read-aloud:webview-runtime",
+      "feature": "read-aloud",
+      "required": true
+    },
+    {
+      "id": "feature:read-aloud:assistant-runtime",
+      "feature": "read-aloud",
+      "required": true
+    },
+    {
+      "id": "feature:read-aloud:settings-toggle",
+      "feature": "read-aloud",
+      "required": true
+    },
+    {
+      "id": "feature:read-aloud-mcp:linux-read-aloud-plugin-gate",
+      "feature": "read-aloud-mcp",
+      "required": true
+    },
+    {
+      "id": "feature:reasoning-visibility:standalone",
+      "feature": "reasoning-visibility",
+      "required": true
+    },
+    {
+      "id": "feature:reasoning-visibility:persistent",
+      "feature": "reasoning-visibility",
+      "required": true
+    },
+    {
+      "id": "feature:reasoning-visibility:transcript",
+      "feature": "reasoning-visibility",
+      "required": true
+    },
+    {
+      "id": "feature:reasoning-visibility:request-summaries",
+      "feature": "reasoning-visibility",
+      "required": true
+    },
+    {
+      "id": "feature:reasoning-visibility:expanded",
+      "feature": "reasoning-visibility",
+      "required": true
+    },
+    {
+      "id": "feature:reasoning-visibility:general-setting",
+      "feature": "reasoning-visibility",
+      "required": true
+    },
+    {
+      "id": "feature:record-and-replay:record-and-replay-plugin-gate",
+      "feature": "record-and-replay",
+      "required": true
+    },
+    {
+      "id": "feature:record-and-replay:linux-record-replay-main-bridge",
+      "feature": "record-and-replay",
+      "required": true
+    },
+    {
+      "id": "feature:record-and-replay:record-replay-hud",
+      "feature": "record-and-replay",
+      "required": true
+    },
+    {
+      "id": "feature:record-and-replay:record-replay-dictation-transcript",
+      "feature": "record-and-replay",
+      "required": true
+    },
+    {
+      "id": "feature:record-and-replay:record-replay-global-dictation-transcript",
+      "feature": "record-and-replay",
+      "required": true
+    },
+    {
+      "id": "feature:remote-control-ui:remote-connections-visibility",
+      "feature": "remote-control-ui",
+      "required": true
+    },
+    {
+      "id": "feature:remote-control-ui:remote-control-connections-visibility",
+      "feature": "remote-control-ui",
+      "required": true
+    },
+    {
+      "id": "feature:remote-control-ui:experimental-features",
+      "feature": "remote-control-ui",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-control-device-key",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-control-client-revocation-recovery",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-mobile-app-server-remote-control",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-control-load-gate",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-control-feature-sync",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-control-visibility",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-control-copy",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-control-settings-ux",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-control-client-revoke-setup-reset",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-connections-refresh",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-mobile-reasoning-summary-none",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-mobile-conversation-hydration",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-terminal-status-recovery",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-control-status-read-guard",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-control-status-wait",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-control-enable-for-host-params",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-control-enablement-bridge",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-control-auto-connect-contract",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:remote-mobile-control:linux-remote-mobile-active-status",
+      "feature": "remote-mobile-control",
+      "required": true
+    },
+    {
+      "id": "feature:start-minimized-to-tray:startup",
+      "feature": "start-minimized-to-tray",
+      "required": true
+    },
+    {
+      "id": "feature:start-minimized-to-tray:general-setting",
+      "feature": "start-minimized-to-tray",
+      "required": true
+    },
+    {
+      "id": "feature:tray-usage:linux-tray-usage-main-process",
+      "feature": "tray-usage",
+      "required": true
+    },
+    {
+      "id": "feature:ui-tweaks:sidebar-project-name-style",
+      "feature": "ui-tweaks",
+      "required": false
+    },
+    {
+      "id": "feature:ui-tweaks:extended-ui-font-size",
+      "feature": "ui-tweaks",
+      "required": true
+    },
+    {
+      "id": "feature:ui-tweaks:model-picker-default-advanced-view",
+      "feature": "ui-tweaks",
+      "required": false
+    },
+    {
+      "id": "feature:ui-tweaks:model-picker-inline-model-list",
+      "feature": "ui-tweaks",
+      "required": false
+    },
+    {
+      "id": "feature:ui-tweaks:model-picker-dynamic-supported-reasoning-efforts",
+      "feature": "ui-tweaks",
+      "required": false
+    },
+    {
+      "id": "feature:ui-tweaks:reasoning-effort-labels-english",
+      "feature": "ui-tweaks",
+      "required": false
+    },
+    {
+      "id": "feature:ui-tweaks:appearance-dock-icon-main-process",
+      "feature": "ui-tweaks",
+      "required": false
+    },
+    {
+      "id": "feature:ui-tweaks:appearance-dock-icon-settings-row",
+      "feature": "ui-tweaks",
+      "required": false
+    },
+    {
+      "id": "feature:ui-tweaks:home-suggested-prompts-main-process",
+      "feature": "ui-tweaks",
+      "required": true
+    },
+    {
+      "id": "feature:ui-tweaks:home-suggested-prompts-feature-sync",
+      "feature": "ui-tweaks",
+      "required": true
+    },
+    {
+      "id": "feature:ui-tweaks:home-suggested-prompts-app-page",
+      "feature": "ui-tweaks",
+      "required": true
+    },
+    {
+      "id": "feature:ui-tweaks:home-suggested-prompts-work-page",
+      "feature": "ui-tweaks",
+      "required": true
+    },
+    {
+      "id": "feature:ui-tweaks:home-suggested-prompts-settings-row",
+      "feature": "ui-tweaks",
+      "required": true
+    },
+    {
+      "id": "feature:ui-tweaks:home-suggested-prompts-content",
+      "feature": "ui-tweaks",
+      "required": true
+    },
+    {
+      "id": "feature:ui-tweaks:appearance-custom-font-input",
+      "feature": "ui-tweaks",
+      "required": true
+    },
+    {
+      "id": "feature:ui-tweaks:selected-text-more-details",
+      "feature": "ui-tweaks",
+      "required": true
+    },
+    {
+      "id": "feature:ui-tweaks:selected-text-annotation-submit",
+      "feature": "ui-tweaks",
+      "required": true
+    },
+    {
+      "id": "feature:wayland-global-shortcuts:wayland-global-shortcuts-actions",
+      "feature": "wayland-global-shortcuts",
+      "required": true
+    }
+  ]
+}

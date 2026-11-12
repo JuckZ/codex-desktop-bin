@@ -17,6 +17,10 @@ on:
       - ".github/workflows/build.yml"
       - "aur/arch-legacy-package.patch"
       - "aur/linux-features.json"
+      - "aur/feature-policy.json"
+      - "aur/feature-profile.cjs"
+      - "aur/build-feature-helpers.sh"
+      - "scripts/feature-profile.test.cjs"
       - "scripts/build-latest.sh"
       - "scripts/prepare-pacman-release.sh"
       - "scripts/setup-pacman-repo.sh"
@@ -51,6 +55,9 @@ jobs:
         run: |
           useradd --create-home --shell /bin/bash builder
           chown -R builder:builder "$GITHUB_WORKSPACE"
+
+      - name: Test feature omission guards
+        run: node --test scripts/feature-profile.test.cjs
 
       - name: Build package
         env:

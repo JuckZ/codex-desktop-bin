@@ -1,3 +1,84 @@
 {
-  "enabled": ["remote-mobile-control", "remote-control-ui"]
+  "enabled": [
+    "agent-workspace",
+    "api-key-model-visibility",
+    "api-key-service-tier",
+    "authored-message-visibility",
+    "automation-extensions",
+    "browser-proxy",
+    "chatgpt-dil-markdown-fallback",
+    "chatgpt-sidebar-separate-history",
+    "chronicle-skysight",
+    "community-features-in-gui-settings",
+    "computer-use-linux",
+    "desktop-identity",
+    "desktop-new-window",
+    "directory-only-working-tree-watch",
+    "filesystem-root-follow-ups",
+    "fork-sidebar-fallback",
+    "global-dictation",
+    "mcp-helper-reaper",
+    "node-repl-reaper",
+    "persistent-status-panel",
+    "pet-overlay",
+    "preferred-editor-file-links",
+    "project-group-last-updated-sort",
+    "project-task-sort",
+    "read-aloud",
+    "read-aloud-mcp",
+    "reasoning-visibility",
+    "record-and-replay",
+    "remote-control-ui",
+    "remote-mobile-control",
+    "start-minimized-to-tray",
+    "tray-usage",
+    "ui-tweaks",
+    "wayland-global-shortcuts"
+  ],
+  "settings": {
+    "ui-tweaks": {
+      "tweaks": {
+        "appearance": {
+          "dockIcon": {
+            "enabled": false
+          },
+          "uiFontSize": {
+            "enabled": true,
+            "max": 24
+          },
+          "customFontInput": {
+            "enabled": true
+          }
+        },
+        "home": {
+          "suggestedPrompts": {
+            "enabled": true
+          }
+        },
+        "modelPicker": {
+          "showModelsByDefault": {
+            "enabled": false
+          }
+        },
+        "reasoning": {
+          "keepEffortLabelsEnglish": {
+            "enabled": false
+          }
+        },
+        "selection": {
+          "moreDetails": {
+            "enabled": true
+          },
+          "annotationSubmit": {
+            "enabled": true
+          }
+        },
+        "sidebar": {
+          "projectName": {
+            "enabled": false
+          }
+        }
+      }
+    }
+  }
 }

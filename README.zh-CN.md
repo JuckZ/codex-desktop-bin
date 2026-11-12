@@ -28,6 +28,20 @@ OpenAI 现已发布原生 Linux 软件包，本项目不再下载或转换 `Code
 实际连接仍需满足账号授权、项目适用性和服务端条件。本地构建与 CI 使用同一配置，
 配置及所需功能代码也会打包进更新器，供后续重新构建使用。
 
+当前采用 **CachyOS / KDE 完整功能配置**：审阅上游全部 52 个功能模块，
+34 项随包安装、10 项需其他环境或额外选择、8 项明确排除并记录原因。
+其中包括原生电脑操作、KDE Wayland 快捷键与听写、API Key 模型可见性和
+Fast 控件、活动记忆与录制回放、朗读，以及
+**设置 → 通用 → 社区功能**中的只读功能清单。
+安装能力后，运行时授权、设备配对、录制开关、外部后端和语音模型下载仍需分别完成。
+API Fast 需要服务商支持，本配置不会自动选择加速模式。
+
+[`aur/feature-policy.json`](aur/feature-policy.json) 保存逐项审阅策略，
+[完整功能清单](docs/FEATURES.md) 说明每项选择及原因。
+上游新增、删除或修改未审阅的 manifest、必需能力组缺失、依赖不全和功能冲突
+都会阻止构建。打包和 Release CI 还核对实际应用、界面目录、更新器配置及原生程序；
+更新器携带同一策略和检查。启用的功能发生补丁漂移时会拒绝候选版本，避免静默遗漏。
+
 安装后的桌面入口名称为 **ChatGPT Community**，以便与 OpenAI 单独提供的
 `chatgpt` 软件包区分。
 
@@ -122,13 +136,16 @@ git pull --ff-only
 UPSTREAM_REF=<branch-tag-or-commit> ./scripts/build-latest.sh
 MAX_BUILD_THREADS=8 ./scripts/build-latest.sh
 PACKAGE_WITH_UPDATER=0 ./scripts/build-latest.sh
-OUTPUT_DIR=/tmp/codex-dist ./scripts/build-latest.sh
+OUTPUT_DIR="$HOME/.cache/codex-dist" ./scripts/build-latest.sh
 UPSTREAM_DEB=/path/to/chatgpt_amd64.deb ./scripts/build-latest.sh
 CODEX_LINUX_FEATURES_CONFIG=/path/to/features.json ./scripts/build-latest.sh
 ```
 
-自定义功能配置必须是已存在的 JSON 文件。使用 `{"enabled":[]}` 可构建
-不含可选功能的版本。构建临时文件默认放在磁盘上的 `.work/tmp`；如需调整，
+自定义功能配置必须是已存在且符合审阅策略的 JSON 文件。修改本发行版的选择时，
+需同时更新策略与配置，运行 `node aur/feature-profile.cjs docs > docs/FEATURES.md`
+重新生成清单，再运行 `node --test scripts/feature-profile.test.cjs`。
+构建会先编译已选择功能的原生辅助程序；更新器重建时复用随包携带的程序。
+构建临时文件默认放在磁盘上的 `.work/tmp`；如需调整，
 请将 `TMPDIR` 指向其他磁盘目录，避免大型解包任务占满内存中的 `/tmp`。
 
 ## AUR 文件

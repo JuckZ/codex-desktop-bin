@@ -34,6 +34,24 @@ Account authorization, project eligibility, and server availability still apply.
 The same configuration is used by local and CI builds and is embedded in the
 updater's rebuild bundle.
 
+The **CachyOS / KDE full profile** reviews all 52 upstream feature modules:
+34 are installed, 10 require a different environment or an explicit additional
+choice, and 8 are excluded with documented reasons. It includes native computer
+control, KDE Wayland shortcuts and dictation, API-key model visibility and Fast
+controls, activity memory/recording, speech, and a read-only feature inventory
+under **Settings → General → Community features**. Runtime permissions,
+pairing, capture switches, external backends and voice-model downloads remain
+separate steps. API Fast requires provider support and is not selected
+automatically.
+
+[`aur/feature-policy.json`](aur/feature-policy.json) is the reviewed policy;
+the [complete inventory and reasons](docs/FEATURES.md) describe every module.
+Source builds reject new, removed or changed unreviewed manifests, incomplete
+capability groups, dependencies and conflicts. Packaging and release CI also
+compare the actual app, GUI catalog, updater configuration and native helpers.
+The updater carries the same policy and checks. A drifted enabled feature
+rejects the candidate instead of silently publishing a reduced build.
+
 The installed desktop entry is **ChatGPT Community** so it remains distinct
 from OpenAI's separate `chatgpt` package.
 
@@ -147,14 +165,19 @@ Useful build overrides:
 UPSTREAM_REF=<branch-tag-or-commit> ./scripts/build-latest.sh
 MAX_BUILD_THREADS=8 ./scripts/build-latest.sh
 PACKAGE_WITH_UPDATER=0 ./scripts/build-latest.sh
-OUTPUT_DIR=/tmp/codex-dist ./scripts/build-latest.sh
+OUTPUT_DIR="$HOME/.cache/codex-dist" ./scripts/build-latest.sh
 UPSTREAM_DEB=/path/to/chatgpt_amd64.deb ./scripts/build-latest.sh
 CODEX_LINUX_FEATURES_CONFIG=/path/to/features.json ./scripts/build-latest.sh
 ```
 
-The feature-config override must point to an existing JSON file. Use
-`{"enabled":[]}` for a build without optional features. Scratch files default
-to `.work/tmp` on disk; set `TMPDIR` to another disk-backed directory if needed.
+The feature-config override must point to an existing JSON file that matches
+the reviewed policy. To change this distribution's feature selection, update
+both the policy and configuration, regenerate the inventory with
+`node aur/feature-profile.cjs docs > docs/FEATURES.md`, and run
+`node --test scripts/feature-profile.test.cjs`. Builds compile the selected
+native helpers before staging; updater rebuilds reuse those packaged helpers.
+Scratch files default to `.work/tmp` on disk; set `TMPDIR` to another disk-backed
+directory if needed.
 
 ## AUR files
 

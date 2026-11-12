@@ -13,9 +13,9 @@ Arch/CachyOS support in this repository remains community-maintained.
   SHA-256 → package SHA-256.
 - Upstream maintainer scripts are not executed; only the data payload is used.
 - With no optional ASAR feature enabled and no required core patch, the official
-  `resources/app.asar` remains byte-for-byte identical. This distribution opts
-  into `remote-mobile-control` and `remote-control-ui`; their ASAR changes are
-  recorded in the patch report.
+  `resources/app.asar` remains byte-for-byte identical. This distribution uses
+  the reviewed 34-module full profile; ASAR changes are recorded in the patch
+  report.
 - The old macOS DMG conversion and its redistribution caveat no longer apply.
 
 The AUR recipe pins a concrete upstream commit and official package hash. The
@@ -23,11 +23,28 @@ local latest-build script follows the signed stable index and records the
 resolved version and digest inside the application build metadata.
 
 Both build paths use the tracked `aur/linux-features.json` configuration. The
-update-builder bundle includes that configuration and both enabled features'
-code/resources, so an update retains the outbound-control adaptations and
-composer remote picker. The
+update-builder bundle includes that configuration, enabled implementations,
+prebuilt native helpers, and the distribution policy/audit code. This retains
+the complete capability groups, including remote settings and the composer
+picker. The
 bundle is a source snapshot: if a new official release breaks its patch
 anchors, rebuild this repository against current upstream source to refresh it.
+
+All 52 upstream modules are classified in `aur/feature-policy.json`. A new,
+removed or modified manifest requires review before a source build can pass.
+Ten conditional and eight excluded modules have explicit reasons in
+[the generated inventory](FEATURES.md). The enabled set, settings, dependency
+closure, conflicts and required capability groups are checked before extraction.
+After staging, the audit compares build-info, patch-report, enabled updater
+implementations, the public GUI catalog and executable helper hashes. Disabled
+implementations are intentionally omitted from the minimal updater; their public
+catalog entries and review policy remain available.
+
+The release job uses its own trusted copy of the audit code to inspect archive
+data. It never runs the copy of that code, or native binaries, supplied by the
+build artifact. Release metadata records the policy digest and enabled list.
+Updater checks run at installation and package staging, retaining upstream
+signature verification and transactional candidate acceptance.
 
 ## Prebuilt pacman repository
 

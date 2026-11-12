@@ -94,6 +94,9 @@ trap cleanup EXIT
 git -C "$WORK_DIR" worktree add --detach "$build_dir" "$upstream_commit"
 git -C "$build_dir" submodule update --init --recursive
 git -C "$build_dir" apply "$MIGRATION_PATCH"
+install -m 0644 "$REPO_ROOT/aur/feature-policy.json" "$REPO_ROOT/aur/feature-profile.cjs" \
+  "$build_dir/packaging/linux/"
+node "$REPO_ROOT/aur/feature-profile.cjs" source "$build_dir" "$CODEX_LINUX_FEATURES_CONFIG"
 node "$build_dir/scripts/lib/linux-features.js" --enabled
 
 printf 'Building %s from %s at %s\n' \
@@ -101,6 +104,9 @@ printf 'Building %s from %s at %s\n' \
 
 (
   cd "$build_dir"
+  export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$REPO_ROOT/.work/cargo-target}"
+  export MAX_BUILD_THREADS
+  source "$REPO_ROOT/aur/build-feature-helpers.sh"
   build_app_args=()
   if [ -n "$UPSTREAM_DEB" ]; then
     [ -f "$UPSTREAM_DEB" ] || {
@@ -136,7 +142,7 @@ printf 'Building %s from %s at %s\n' \
   printf 'Resolved OpenAI package %s; native package version %s\n' \
     "$upstream_version" "$package_version"
 
-  cargo_target_dir="${CARGO_TARGET_DIR:-$REPO_ROOT/.work/cargo-target}"
+  cargo_target_dir="$CARGO_TARGET_DIR"
   MAX_BUILD_THREADS="$MAX_BUILD_THREADS" \
     CARGO_TARGET_DIR="$cargo_target_dir" \
     PACKAGE_NAME="$PACKAGE_NAME" \

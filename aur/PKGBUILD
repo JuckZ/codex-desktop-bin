@@ -1,7 +1,7 @@
 # Maintainer: JuckZ <juckz@foxmail.com>
 
 pkgname=codex-desktop
-pkgver=2026.11.12.135415
+pkgver=2026.11.12.141624
 pkgrel=1
 pkgdesc="ChatGPT Community for Arch, repackaged from OpenAI's signed official Linux package"
 arch=('x86_64' 'aarch64')
@@ -69,13 +69,19 @@ source=(
   "codex-desktop-linux::git+https://github.com/ilysenko/codex-desktop-linux.git#commit=${_upstream_ref}"
   'arch-legacy-package.patch'
   'linux-features.json'
+  'feature-policy.json'
+  'feature-profile.cjs'
+  'build-feature-helpers.sh'
   'LICENSE'
   'DISCLAIMER.md'
 )
 sha256sums=(
   'SKIP'
-  '73836d6f77e8e6e55147adcc4e47dad5b4f47a7023dce109faf561310c9d9eab'
-  '23f3651641c1d2deb6f276cdee8a174ff77b28a169e0425bfa755741e2a523c0'
+  'b9d9da99f1d5062362b3a561717c97c37a7ab83207740cc206206b3f63e85bce'
+  '31fe8f0f64de0fb5f2dbd136ca39855913f36e705e884d56da5c3bae28ec85f6'
+  '11995864443d840a3ff5192e0a6712c9797d9437044f0d5b81608cc9eee7605c'
+  'bf2da4ff29292b6e494e75d490096317dc62cb55188af6179ab7b865cfb046c0'
+  'e025e7ee3b0158a31f2cc5169e4650d2046afa19ba0fee214410052ca222ad9c'
   '240808ad5dc4e6267fb92e6a77e34d87614b0a934415b70562657534a956d161'
   '75e2921aec7edfbe78906419394dfbaf93fba0373cc6cd92a2d9a49109f383d3'
 )
@@ -87,6 +93,8 @@ sha256sums_aarch64=('ce49ac9a1efc1b5326504b0169570b8d0973f4b18461fbcc0597bbfe531
 prepare() {
   cd "$srcdir/codex-desktop-linux"
   git apply "$srcdir/arch-legacy-package.patch"
+  install -m 0644 "$srcdir/feature-policy.json" "$srcdir/feature-profile.cjs" packaging/linux/
+  node "$srcdir/feature-profile.cjs" source "$PWD" "$srcdir/linux-features.json"
 }
 
 build() {
@@ -101,13 +109,16 @@ build() {
   esac
 
   cd "$srcdir/codex-desktop-linux"
+  export CARGO_TARGET_DIR="$srcdir/cargo-target"
+  export MAX_BUILD_THREADS="${MAX_BUILD_THREADS:-4}"
+  source "$srcdir/build-feature-helpers.sh"
   CODEX_APP_ID=codex-desktop \
     CODEX_APP_DISPLAY_NAME='ChatGPT Community' \
     CODEX_INSTALL_DIR="$srcdir/codex-desktop-linux/codex-app" \
     UPSTREAM_DEB= \
     ./install.sh "$upstream_deb"
 
-  MAX_BUILD_THREADS="$(nproc)" \
+  MAX_BUILD_THREADS="$MAX_BUILD_THREADS" \
     CARGO_TARGET_DIR="$srcdir/cargo-target" \
     PACKAGE_NAME=codex-desktop \
     PACKAGE_VERSION="$pkgver" \

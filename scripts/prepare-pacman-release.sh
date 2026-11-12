@@ -62,6 +62,20 @@ done < <(bsdtar -tf "$PACKAGE_PATH")
   exit 1
 }
 
+# Inspect selected archive data with trusted publishing code. Never execute
+# the copy of the audit script or any other code supplied by the build job.
+audit_root="$(mktemp -d)"
+trap 'rm -rf -- "$audit_root"' EXIT
+mapfile -t audit_paths < <(node - "$REPO_ROOT/aur/feature-policy.json" <<'NODE'
+const policy = require(process.argv[2]);
+for (const file of [".codex-linux/build-info.json", ".codex-linux/patch-report.json",
+  "update-builder", ...policy.nativeArtifacts.map(a => a.app)])
+  console.log(`opt/codex-desktop/${file}`);
+NODE
+)
+bsdtar --no-same-owner -xf "$PACKAGE_PATH" -C "$audit_root" "${audit_paths[@]}"
+node "$REPO_ROOT/aur/feature-profile.cjs" package "$audit_root/opt/codex-desktop"
+
 mkdir -p "$RELEASE_DIR"
 cp "$PACKAGE_PATH" "$RELEASE_DIR/$package_file"
 (
@@ -79,6 +93,7 @@ PACKAGING_REPOSITORY="$PACKAGING_REPOSITORY" \
 RELEASE_DIR="$RELEASE_DIR" \
 UPSTREAM_REF="$UPSTREAM_REF" \
 WORKFLOW_RUN_URL="$WORKFLOW_RUN_URL" \
+FEATURE_POLICY="$REPO_ROOT/aur/feature-policy.json" \
 node <<'NODE'
 const crypto = require("node:crypto");
 const fs = require("node:fs");
@@ -121,6 +136,11 @@ const metadata = {
   },
   upstreamLinuxPackage: info.upstreamLinuxPackage,
   upstreamSource: info.source,
+  featureProfile: {
+    id: JSON.parse(fs.readFileSync(process.env.FEATURE_POLICY)).profile,
+    enabled: info.linuxFeatures.enabled,
+    policySha256: crypto.createHash("sha256").update(fs.readFileSync(process.env.FEATURE_POLICY)).digest("hex"),
+  },
   packaging: {
     repository: process.env.PACKAGING_REPOSITORY,
     commit: process.env.PACKAGING_COMMIT,

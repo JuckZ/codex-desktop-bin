@@ -1,5 +1,5 @@
 diff --git a/install.sh b/install.sh
-index 250042fb..fa9210fb 100755
+index 250042fb..6defcfd6 100755
 --- a/install.sh
 +++ b/install.sh
 @@ -15,7 +15,6 @@ fi
@@ -25,6 +25,14 @@ index 250042fb..fa9210fb 100755
  }
  
  verify_clean_asar_preserved() {
+@@ -146,6 +144,7 @@ main() {
+     parse_args "$@"
+     validate_app_identity
+     check_deps
++    node "$SCRIPT_DIR/packaging/linux/feature-profile.cjs" configured "$SCRIPT_DIR"
+ 
+     if [ "$INSPECT_ONLY" -ne 1 ] && [ "${CODEX_INSTALL_TRANSACTION_ACTIVE:-0}" != "1" ]; then
+         assert_install_target_not_running
 diff --git a/packaging/linux/DISCLAIMER.md b/packaging/linux/DISCLAIMER.md
 new file mode 100644
 index 00000000..0cb42844
@@ -142,10 +150,20 @@ index 7be674dd..01f6c5a8 100644
    const m = { version: "26.930.31730", architecture, sha256: "a".repeat(64), size: 42 };
    fs.writeFileSync(path.join(dir, "metadata.json"), JSON.stringify(m));
 diff --git a/scripts/lib/package-common.sh b/scripts/lib/package-common.sh
-index d856b6f9..970b9524 100755
+index d856b6f9..65e428e5 100755
 --- a/scripts/lib/package-common.sh
 +++ b/scripts/lib/package-common.sh
-@@ -388,7 +388,9 @@ resolve_package_icon_source() {
+@@ -261,6 +261,9 @@ run_linux_feature_package_hooks() {
+             PACKAGE_STAGING_ROOT="$staging_root" \
+             bash "$hook_path"
+     done <<< "$hooks_output"
++    local audit_mode=app
++    if package_with_updater_enabled; then audit_mode=package; fi
++    "$node_bin" "$REPO_DIR/packaging/linux/feature-profile.cjs" "$audit_mode" "$app_dir"
+ }
+ 
+ stage_linux_feature_package_resources() {
+@@ -388,7 +391,9 @@ resolve_package_icon_source() {
          printf '%s\n' "$PACKAGE_ICON_SOURCE"
          return 0
      fi
@@ -156,7 +174,7 @@ index d856b6f9..970b9524 100755
  }
  
  render_packaged_runtime_helper() {
-@@ -895,9 +897,13 @@ write_update_builder_manifest() {
+@@ -895,9 +900,13 @@ write_update_builder_manifest() {
  stage_common_package_files() {
      local root="$1"
      local app_root="$root/opt/$PACKAGE_NAME"
@@ -170,7 +188,7 @@ index d856b6f9..970b9524 100755
  
      if package_with_updater_enabled; then
          ensure_file_exists "$polkit_policy" "polkit policy"
-@@ -908,6 +914,7 @@ stage_common_package_files() {
+@@ -908,6 +917,7 @@ stage_common_package_files() {
          "$root/usr/bin" \
          "$root/usr/share/applications" \
          "$root/usr/share/icons/hicolor/256x256/apps" \
@@ -178,7 +196,7 @@ index d856b6f9..970b9524 100755
          "$root/etc/apparmor.d"
      if package_with_updater_enabled; then
          mkdir -p \
-@@ -915,6 +922,12 @@ stage_common_package_files() {
+@@ -915,6 +925,12 @@ stage_common_package_files() {
              "$root/usr/share/polkit-1/actions"
      fi
  
