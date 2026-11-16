@@ -14,7 +14,7 @@ Arch/CachyOS support in this repository remains community-maintained.
 - Upstream maintainer scripts are not executed; only the data payload is used.
 - With no optional ASAR feature enabled and no required core patch, the official
   `resources/app.asar` remains byte-for-byte identical. This distribution uses
-  the reviewed 34-module full profile; ASAR changes are recorded in the patch
+  the reviewed 33-module full profile; ASAR changes are recorded in the patch
   report.
 - The old macOS DMG conversion and its redistribution caveat no longer apply.
 
@@ -32,7 +32,7 @@ anchors, rebuild this repository against current upstream source to refresh it.
 
 All 52 upstream modules are classified in `aur/feature-policy.json`. A new,
 removed or modified manifest requires review before a source build can pass.
-Ten conditional and eight excluded modules have explicit reasons in
+Eleven conditional and eight excluded modules have explicit reasons in
 [the generated inventory](FEATURES.md). The enabled set, settings, dependency
 closure, conflicts and required capability groups are checked before extraction.
 After staging, the audit compares build-info, patch-report, enabled updater

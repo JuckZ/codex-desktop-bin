@@ -35,14 +35,19 @@ The same configuration is used by local and CI builds and is embedded in the
 updater's rebuild bundle.
 
 The **CachyOS / KDE full profile** reviews all 52 upstream feature modules:
-34 are installed, 10 require a different environment or an explicit additional
+33 are installed, 11 require a different environment or an explicit additional
 choice, and 8 are excluded with documented reasons. It includes native computer
 control, KDE Wayland shortcuts and dictation, API-key model visibility and Fast
-controls, activity memory/recording, speech, and a read-only feature inventory
+controls, activity memory/recording, speech tools, and a read-only feature inventory
 under **Settings → General → Community features**. Runtime permissions,
 pairing, capture switches, external backends and voice-model downloads remain
 separate steps. API Fast requires provider support and is not selected
 automatically.
+
+The extra community `read-aloud` buttons are disabled by default. The official
+message action row keeps its existing speech control. The independent
+`read-aloud-mcp` tool remains available; installing the profile does not download
+voice models or start playback.
 
 [`aur/feature-policy.json`](aur/feature-policy.json) is the reviewed policy;
 the [complete inventory and reasons](docs/FEATURES.md) describe every module.

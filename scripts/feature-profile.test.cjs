@@ -140,3 +140,12 @@ test("distribution config and generated inventory stay synchronized", () => {
   compareConfig(JSON.parse(fs.readFileSync(path.resolve(__dirname, "../aur/linux-features.json"))), policy, "committed");
   assert.equal(fs.readFileSync(path.resolve(__dirname, "../docs/FEATURES.md"), "utf8"), renderDocs(policy));
 });
+test("the default profile keeps native speech controls without injecting a button under every message", () => {
+  const policy = JSON.parse(fs.readFileSync(policyPath));
+  const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, "../aur/linux-features.json")));
+  assert.equal(policy.features["read-aloud"].status, "conditional");
+  assert.ok(!config.enabled.includes("read-aloud"));
+  assert.ok(config.enabled.includes("read-aloud-mcp"));
+  assert.ok(!Object.values(policy.requiredGroups).flat().includes("read-aloud"));
+  assert.ok(!policy.patches.some((patch) => patch.feature === "read-aloud"));
+});

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "profile": "cachyos-kde-full",
-  "reviewedUpstream": "685ef54d05ae054bce932566399a79fa8282b43d",
+  "reviewedUpstream": "952d165bb76227672078bc0310c7e18b2616d9d1",
   "target": "Arch/CachyOS KDE Wayland; amd64/arm64 source builds, amd64 release",
   "features": {
     "account-switcher": {
@@ -233,8 +233,8 @@
       "public": true
     },
     "read-aloud": {
-      "status": "enabled",
-      "reason": "提供点击朗读及声音设置；不在安装或启动时下载语音模型。",
+      "status": "conditional",
+      "reason": "按用户选择默认关闭额外的逐消息朗读按钮，保留官方原有朗读操作；如需社区 UI 须另行选择并配置声音模型，避免回退系统机械音。",
       "manifestSha256": "abbc6ff228a36ce10a44eeafa286daafc4d287c0a082814fed247b15f952db3b",
       "public": true
     },
@@ -338,7 +338,6 @@
       "record-and-replay"
     ],
     "speech": [
-      "read-aloud",
       "read-aloud-mcp"
     ],
     "feature-catalog": [
@@ -612,26 +611,6 @@
     {
       "id": "feature:project-task-sort:creation-time",
       "feature": "project-task-sort",
-      "required": true
-    },
-    {
-      "id": "feature:read-aloud:main-handler",
-      "feature": "read-aloud",
-      "required": true
-    },
-    {
-      "id": "feature:read-aloud:webview-runtime",
-      "feature": "read-aloud",
-      "required": true
-    },
-    {
-      "id": "feature:read-aloud:assistant-runtime",
-      "feature": "read-aloud",
-      "required": true
-    },
-    {
-      "id": "feature:read-aloud:settings-toggle",
-      "feature": "read-aloud",
       "required": true
     },
     {

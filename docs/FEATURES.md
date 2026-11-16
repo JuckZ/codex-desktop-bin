@@ -1,8 +1,8 @@
 # CachyOS / KDE 完整功能配置
 
-由 `aur/feature-policy.json` 生成。审阅基线：`685ef54d05ae054bce932566399a79fa8282b43d`。
+由 `aur/feature-policy.json` 生成。审阅基线：`952d165bb76227672078bc0310c7e18b2616d9d1`。
 
-共 52 个模块：随包安装 34，需满足条件后另行选择 10，明确排除 8。
+共 52 个模块：随包安装 33，需满足条件后另行选择 11，明确排除 8。
 
 “已安装”表示能力及相应入口已打包，不表示已授权、已连接、正在录制或已下载外部模型。设置 → 通用 → 社区功能可查看安装状态和子功能；运行时状态需在相应功能中查看。
 
@@ -48,7 +48,7 @@
 | `preferred-editor-file-links` | enabled | 文件链接遵守首选编辑器。 |
 | `project-group-last-updated-sort` | enabled | 提供项目组最近更新时间排序。 |
 | `project-task-sort` | enabled | 提供项目任务排序。 |
-| `read-aloud` | enabled | 提供点击朗读及声音设置；不在安装或启动时下载语音模型。 |
+| `read-aloud` | conditional | 按用户选择默认关闭额外的逐消息朗读按钮，保留官方原有朗读操作；如需社区 UI 须另行选择并配置声音模型，避免回退系统机械音。 |
 | `read-aloud-mcp` | enabled | 包含朗读 MCP 后端；实际语音模型由用户后续安装。 |
 | `reasoning-visibility` | enabled | 显示服务已提供的推理摘要及相应设置。 |
 | `record-and-replay` | enabled | 补齐录制与回放工作流，依赖活动记忆；保留运行时主动开启。 |
